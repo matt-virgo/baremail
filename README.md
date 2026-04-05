@@ -202,6 +202,18 @@ OAuth tokens are stored locally. The app requests only the minimum scopes needed
 
 MIT — see [LICENSE](LICENSE)
 
+## Support
+
+If BAREmail saved you from staring at a loading spinner on airplane wifi, consider buying the bear a coffee:
+
+```
+    ( o.o )
+    ( > 🍵< )
+     ʕ·ᴥ·ʔ
+```
+
+<a href="https://www.buymeacoffee.com/mzschwartz88"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=matt-virgo/baremail&type=Date)](https://star-history.com/#matt-virgo/baremail&Date)
