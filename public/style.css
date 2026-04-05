@@ -584,6 +584,207 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   letter-spacing: 2px;
 }
 
+/* ── Setup Wizard ── */
+.wizard {
+  max-width: 480px;
+  margin: 0 auto 24px;
+  text-align: left;
+}
+
+.wizard-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.wizard-bear {
+  color: var(--amber);
+  font-size: 16px;
+}
+
+.wizard-title {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.wizard-time {
+  color: var(--dim-text);
+  font-size: 11px;
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+
+.wizard-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.wizard-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.2s;
+}
+
+.wizard-dot.active {
+  background: var(--amber);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--amber) 50%, transparent);
+}
+
+.wizard-dot.done {
+  background: var(--amber-dim);
+  cursor: pointer;
+}
+
+.wizard-dot.done:hover {
+  background: var(--amber);
+}
+
+.wizard-step-label {
+  text-align: center;
+  color: var(--dim-text);
+  font-size: 11px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.wizard-step {
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 16px;
+  background: color-mix(in srgb, var(--bg-light) 50%, transparent);
+}
+
+.wizard-step-title {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+.wizard-body {
+  color: var(--mid-text);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.wizard-body p {
+  margin: 0 0 8px;
+}
+
+.wizard-body p:last-child {
+  margin-bottom: 0;
+}
+
+.wizard-instructions {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--mid-text);
+  font-size: 12px;
+  line-height: 2;
+}
+
+.wizard-instructions strong {
+  color: var(--amber);
+}
+
+.wizard-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 10px 24px;
+}
+
+.wizard-credentials {
+  margin-bottom: 16px;
+}
+
+.wizard-field {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.wizard-field-label {
+  display: block;
+  color: var(--dim-text);
+  font-size: 11px;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.wizard-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--mid-text);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 10px 12px;
+  transition: border-color 0.15s;
+}
+
+.wizard-input:focus {
+  border-color: var(--amber-dim);
+  outline: none;
+}
+
+.wizard-input::placeholder {
+  color: var(--dim-text);
+  opacity: 0.5;
+}
+
+.wizard-error {
+  color: var(--red);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.wizard-trouble {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.wizard-trouble-toggle {
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.wizard-trouble-toggle:hover {
+  color: var(--amber-dim);
+}
+
+.wizard-trouble-body {
+  color: var(--dim-text);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* ── Footer ── */
 .footer {
   position: fixed;
@@ -840,6 +1041,69 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   color: var(--amber);
   font-size: 14px;
   margin: 0 0 12px;
+}
+
+/* ── Account popover ── */
+.header-status-left {
+  position: relative;
+}
+
+.header-status-btn {
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px 2px 0;
+  transition: color 0.15s;
+}
+
+.header-status-btn:hover {
+  color: var(--amber-dim);
+}
+
+.account-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  z-index: 20;
+  min-width: 200px;
+  animation: fadeSlideIn 0.15s ease both;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .account-popover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.account-popover-email {
+  color: var(--mid-text);
+  font-size: 11px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  word-break: break-all;
+}
+
+.account-popover-logout {
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px 0;
+  width: 100%;
+  text-align: left;
+  transition: color 0.15s;
+}
+
+.account-popover-logout:hover {
+  color: var(--red);
 }
 
 /* ── Theme toggle ── */

@@ -2,6 +2,8 @@ import { getConfig } from './config.js';
 import { getPref, setPref, deletePref, clearAllData } from './cache.js';
 
 const SCOPES = [
+  'openid',
+  'email',
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/gmail.send',
   'https://www.googleapis.com/auth/gmail.modify',

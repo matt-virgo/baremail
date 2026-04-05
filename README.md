@@ -32,27 +32,29 @@ BAREmail is a Progressive Web App that talks directly to the Gmail API. The enti
 - Inbox zero bear mascot with animated ASCII scenes
 - Hidden mini-game: Honey Catcher
 
-## Quick Start
+## Quick Start (~3 minutes)
+
+> **Easiest path:** run `npm install && npm start`, open [http://localhost:3000](http://localhost:3000), and the built-in setup wizard will walk you through everything step by step — no need to read ahead. The steps below are for reference.
 
 ### 1. Create a Google Cloud project
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project (or select an existing one)
+1. Open the [Create Project](https://console.cloud.google.com/projectcreate) page
+2. Name it anything (e.g. `BAREmail`) and click **Create**
 
 ### 2. Enable the Gmail API
 
-1. Navigate to **APIs & Services → Library**
-2. Search for **Gmail API** and click **Enable**
+1. Open the [Gmail API](https://console.cloud.google.com/apis/library/gmail.googleapis.com) page
+2. Select your project from the dropdown at the top, then click **Enable**
 
 ### 3. Configure the OAuth consent screen
 
-1. Navigate to **APIs & Services → OAuth consent screen**
+1. Open the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
 2. Select User type: **External**, then click **Create**
 3. Fill in the required fields:
    - App name: `BAREmail` (or anything you like)
    - User support email: your email
    - Developer contact: your email
-4. Click **Save and Continue** through the Scopes step (no changes needed -- BAREmail requests scopes at runtime)
+4. Click **Save and Continue** through the Scopes step (no changes needed)
 5. On the **Test users** step, click **Add users** and add your Gmail address (e.g. `you@gmail.com`)
 6. Click **Save and Continue**, then **Back to Dashboard**
 
@@ -60,22 +62,33 @@ BAREmail is a Progressive Web App that talks directly to the Gmail API. The enti
 
 ### 4. Create OAuth credentials
 
-1. Navigate to **APIs & Services → Credentials**
-2. Click **Create Credentials → OAuth client ID**
-3. Application type: **Web application**
-4. Name: `BAREmail` (or anything)
-5. Under **Authorized JavaScript origins**, add: `http://localhost:3000`
-6. Under **Authorized redirect URIs**, add: `http://localhost:3000`
-7. Click **Create** and copy both the **Client ID** and **Client secret**
+1. Open the [Create OAuth client](https://console.cloud.google.com/apis/credentials/oauthclient) page
+2. Application type: **Web application**
+3. Name: `BAREmail` (or anything)
+4. Under **Authorized JavaScript origins**, add: `http://localhost:3000`
+5. Under **Authorized redirect URIs**, add: `http://localhost:3000`
+6. Click **Create** and copy both the **Client ID** and **Client secret**
 
-### 5. Configure BAREmail
+### 5. Install and run
 
+```bash
+npm install
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000). If you followed the in-app wizard, you're done — sign in with Google. Otherwise, paste your credentials into the wizard or use one of these alternatives:
+
+**Option A — CLI setup (interactive):**
+```bash
+npm run setup
+```
+This opens each Google Cloud page for you and writes `config.js` automatically.
+
+**Option B — Manual config file:**
 ```bash
 cp config.example.js config.js
 ```
-
 Edit `config.js` and paste your Client ID and Client Secret:
-
 ```js
 window.BAREMAIL_CONFIG = {
   GOOGLE_CLIENT_ID: 'your-client-id.apps.googleusercontent.com',
@@ -86,16 +99,7 @@ window.BAREMAIL_CONFIG = {
 
 > **Note on the client secret:** This is visible in the source code, which is expected for browser-based apps using Google's "Web application" OAuth type. The PKCE flow protects against authorization code interception, and the secret alone can't access anyone's data without user consent. The app also enforces a Content Security Policy that prevents third-party scripts from running.
 
-### 6. Install and run
-
-```bash
-npm install
-npm start
-```
-
-Open [http://localhost:3000](http://localhost:3000), sign in with Google, and then **install the PWA** (see below).
-
-> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. This warning only appears because the app is in testing mode -- your data still goes directly to Google's API, never through a third party.
+> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. This warning only appears because the app is in testing mode — your data still goes directly to Google's API, never through a third party.
 
 ### 7. Install as a PWA (use from your dock)
 
@@ -122,6 +126,7 @@ BAREmail is designed to be used as an installed app, not a browser tab. Once ins
 | Command | Description |
 |---------|-------------|
 | `npm start` | Production build + serve on port 3000 (use this) |
+| `npm run setup` | Interactive setup — opens GCP pages and writes config.js |
 | `npm run dev` | Dev server with sourcemaps (for development) |
 | `npm run build` | Production build to `dist/` (for deployment) |
 | `npm run watch` | Watch mode, rebuilds on change |
@@ -190,6 +195,20 @@ OAuth tokens are stored locally. The app requests only the minimum scopes needed
 | `e` | Archive current email |
 | `Esc` | Back / discard |
 | `Cmd+Enter` | Send message |
+
+## Troubleshooting
+
+**"Access blocked: This app has not completed the Google verification process"**
+You didn't add yourself as a test user. Go to the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent), click your app, go to the Test users section, and add your Gmail address.
+
+**"Error 400: redirect_uri_mismatch"**
+Your OAuth credentials are missing the redirect URI. Go to [Credentials](https://console.cloud.google.com/apis/credentials), click on your OAuth client, and make sure both **Authorized JavaScript origins** and **Authorized redirect URIs** include `http://localhost:3000` (exact match, no trailing slash).
+
+**"Error 401: invalid_client"**
+Double-check that you copied the full Client ID (it ends with `.apps.googleusercontent.com`). If using `config.js`, make sure the file is saved and you restarted the server.
+
+**"Google hasn't verified this app"**
+This is expected. Click **Advanced** → **Go to BAREmail (unsafe)**. This warning appears because your app is in testing mode. Your data still goes directly to Google's API.
 
 ## Contributing
 

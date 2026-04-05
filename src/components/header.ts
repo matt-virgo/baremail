@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { useState, useEffect, useRef } from 'preact/hooks';
 import htm from 'htm';
 import { StatusDot, formatBytes } from './common.js';
 import type { ConnectionStatus } from '../types.js';
@@ -12,9 +13,25 @@ interface HeaderProps {
   totalBytes: number;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
+  userEmail: string | null;
+  onLogout: () => void;
 }
 
-export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes, theme, onToggleTheme }: HeaderProps) {
+export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes, theme, onToggleTheme, userEmail, onLogout }: HeaderProps) {
+  const [showAccount, setShowAccount] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showAccount) return;
+    const close = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setShowAccount(false);
+      }
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [showAccount]);
+
   const statusText = connectionStatus === 'online' ? 'connected'
     : connectionStatus === 'slow' ? 'slow connection'
     : 'offline';
@@ -33,9 +50,22 @@ export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes,
         <div class="header-tagline">── email's bare necessities ──</div>
       </div>
       <div class="header-status">
-        <span>
-          <${StatusDot} status=${connectionStatus} />
-          ${statusText} · ${inboxText}
+        <span class="header-status-left" ref=${popoverRef}>
+          <button class="header-status-btn" onClick=${() => setShowAccount(!showAccount)}>
+            <${StatusDot} status=${connectionStatus} />
+            ${statusText}
+          </button>
+          ${' · '}${inboxText}
+          ${showAccount && html`
+            <div class="account-popover">
+              ${userEmail && html`
+                <div class="account-popover-email">${userEmail}</div>
+              `}
+              <button class="account-popover-logout" onClick=${onLogout}>
+                ⏻ sign out
+              </button>
+            </div>
+          `}
         </span>
         <span>
           <button class="theme-toggle" onClick=${onToggleTheme}>

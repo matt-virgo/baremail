@@ -1,7 +1,7 @@
 import { h, render } from 'preact';
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
 import htm from 'htm';
-import { initAuth, isAuthenticated, handleOAuthCallback, logout } from './auth.js';
+import { initAuth, isAuthenticated, handleOAuthCallback, logout, getUserEmail } from './auth.js';
 import { getTotalBytes, archiveMessage, starMessage, unstarMessage } from './gmail.js';
 import { getPref, setPref, getOutboxCount } from './cache.js';
 import { Header } from './components/header.js';
@@ -358,6 +358,8 @@ function App() {
             totalBytes=${totalBytes}
             theme=${theme}
             onToggleTheme=${toggleTheme}
+            userEmail=${getUserEmail()}
+            onLogout=${handleLogout}
           />
 
           <${Nav}
