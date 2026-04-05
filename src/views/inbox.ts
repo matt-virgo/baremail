@@ -68,7 +68,9 @@ export function InboxView({
       }
 
       const ids = result.messages.map(m => m.id);
-      const metadata = await batchGetMetadata(ids);
+      const metadata = await batchGetMetadata(ids, (_loaded, _total, partial) => {
+        onEmailsLoaded(key, partial, result.nextPageToken, !!pageToken);
+      });
       await cacheMessages(metadata);
 
       onEmailsLoaded(key, metadata, result.nextPageToken, !!pageToken);

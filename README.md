@@ -66,7 +66,7 @@ BAREmail is a Progressive Web App that talks directly to the Gmail API. The enti
 4. Name: `BAREmail` (or anything)
 5. Under **Authorized JavaScript origins**, add: `http://localhost:3000`
 6. Under **Authorized redirect URIs**, add: `http://localhost:3000`
-7. Click **Create** and copy the **Client ID**
+7. Click **Create** and copy both the **Client ID** and **Client secret**
 
 ### 5. Configure BAREmail
 
@@ -74,16 +74,17 @@ BAREmail is a Progressive Web App that talks directly to the Gmail API. The enti
 cp config.example.js config.js
 ```
 
-Edit `config.js` and paste your Client ID:
+Edit `config.js` and paste your Client ID and Client Secret:
 
 ```js
 window.BAREMAIL_CONFIG = {
   GOOGLE_CLIENT_ID: 'your-client-id.apps.googleusercontent.com',
+  GOOGLE_CLIENT_SECRET: 'your-client-secret',
   GOOGLE_REDIRECT_URI: window.location.origin,
 };
 ```
 
-> **No client secret needed.** BAREmail uses the PKCE (Proof Key for Code Exchange) flow, which is the recommended OAuth approach for browser-based apps. No client secret is sent or stored.
+> **Note on the client secret:** This is visible in the source code, which is expected for browser-based apps using Google's "Web application" OAuth type. The PKCE flow protects against authorization code interception, and the secret alone can't access anyone's data without user consent. The app also enforces a Content Security Policy that prevents third-party scripts from running.
 
 ### 6. Install and run
 

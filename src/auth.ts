@@ -60,7 +60,7 @@ export async function login(): Promise<void> {
     code_challenge_method: 'S256',
     state,
     access_type: 'offline',
-    prompt: 'consent',
+    prompt: 'select_account consent',
   });
 
   window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
@@ -97,16 +97,21 @@ export async function handleOAuthCallback(): Promise<boolean> {
   const config = getConfig();
 
   try {
+    const tokenParams: Record<string, string> = {
+      code,
+      client_id: config.GOOGLE_CLIENT_ID,
+      redirect_uri: config.GOOGLE_REDIRECT_URI,
+      grant_type: 'authorization_code',
+      code_verifier: codeVerifier,
+    };
+    if (config.GOOGLE_CLIENT_SECRET) {
+      tokenParams.client_secret = config.GOOGLE_CLIENT_SECRET;
+    }
+
     const response = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        code,
-        client_id: config.GOOGLE_CLIENT_ID,
-        redirect_uri: config.GOOGLE_REDIRECT_URI,
-        grant_type: 'authorization_code',
-        code_verifier: codeVerifier,
-      }),
+      body: new URLSearchParams(tokenParams),
     });
 
     if (!response.ok) {
@@ -152,14 +157,19 @@ async function refreshAccessToken(): Promise<boolean> {
   const config = getConfig();
 
   try {
+    const refreshParams: Record<string, string> = {
+      refresh_token: tokenData.refresh_token,
+      client_id: config.GOOGLE_CLIENT_ID,
+      grant_type: 'refresh_token',
+    };
+    if (config.GOOGLE_CLIENT_SECRET) {
+      refreshParams.client_secret = config.GOOGLE_CLIENT_SECRET;
+    }
+
     const response = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        refresh_token: tokenData.refresh_token,
-        client_id: config.GOOGLE_CLIENT_ID,
-        grant_type: 'refresh_token',
-      }),
+      body: new URLSearchParams(refreshParams),
     });
 
     if (!response.ok) return false;

@@ -86,12 +86,27 @@ async function getMessageMetadata(id: string): Promise<GmailMessage> {
 }
 
 export async function batchGetMetadata(
-  ids: string[]
+  ids: string[],
+  onProgress?: (loaded: number, total: number, messages: GmailMessage[]) => void
 ): Promise<GmailMessage[]> {
   if (ids.length === 0) return [];
 
-  const results = await Promise.all(ids.map(id => getMessageMetadata(id)));
-  return results;
+  const results: (GmailMessage | null)[] = new Array(ids.length).fill(null);
+  let loadedCount = 0;
+
+  const promises = ids.map((id, index) =>
+    getMessageMetadata(id).then(msg => {
+      results[index] = msg;
+      loadedCount++;
+      if (onProgress) {
+        const loaded = results.filter((r): r is GmailMessage => r !== null);
+        onProgress(loadedCount, ids.length, loaded);
+      }
+    })
+  );
+
+  await Promise.all(promises);
+  return results as GmailMessage[];
 }
 
 // ── Get single message ──
@@ -107,6 +122,29 @@ export async function getMessage(id: string): Promise<GmailMessage> {
 }
 
 // ── Send message ──
+
+function wrapLongLines(text: string, maxLen = 76): string {
+  return text.split('\n').map(line => {
+    if (line.length <= maxLen) return line;
+    const chunks: string[] = [];
+    let i = 0;
+    while (i < line.length) {
+      let breakAt = -1;
+      const end = Math.min(i + maxLen, line.length);
+      for (let j = end - 1; j > i; j--) {
+        if (line[j] === ' ') { breakAt = j; break; }
+      }
+      if (breakAt === -1 || breakAt === i) {
+        chunks.push(line.slice(i, end));
+        i = end;
+      } else {
+        chunks.push(line.slice(i, breakAt));
+        i = breakAt + 1;
+      }
+    }
+    return chunks.join('\n');
+  }).join('\n');
+}
 
 export interface SendAttachment {
   name: string;
@@ -142,6 +180,7 @@ export async function sendMessage(
     headers.push(`References: ${options.inReplyTo}`);
   }
 
+  const wrappedBody = wrapLongLines(body);
   let raw: string;
 
   if (hasAttachments) {
@@ -152,7 +191,7 @@ export async function sendMessage(
       `--${boundary}`,
       'Content-Type: text/plain; charset=utf-8',
       '',
-      body,
+      wrappedBody,
     ];
 
     for (const att of options!.attachments!) {
@@ -170,7 +209,7 @@ export async function sendMessage(
     raw = parts.join('\r\n');
   } else {
     headers.push('Content-Type: text/plain; charset=utf-8');
-    raw = headers.join('\r\n') + '\r\n\r\n' + body;
+    raw = headers.join('\r\n') + '\r\n\r\n' + wrappedBody;
   }
 
   const encoded = btoa(unescape(encodeURIComponent(raw)))
