@@ -207,8 +207,7 @@ MIT — see [LICENSE](LICENSE)
 If BAREmail saved you from staring at a loading spinner on airplane wifi, consider buying the bear a coffee:
 
 ```
-             ♨
-      ʕ·ᴥ·ʔ C[_]
+      ʕ·ᴥ·ʔ ☕
       |    |/
       |    |    thx for the coffee!
      /|    |\
