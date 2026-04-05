@@ -27,7 +27,8 @@ function App() {
   const [selectedEmail, setSelectedEmail] = useState<GmailMessage | null>(null);
   const [composeData, setComposeData] = useState<ComposeData>(EMPTY_COMPOSE);
   const [activeLabel, setActiveLabel] = useState('inbox');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
+  const [apiSearchQuery, setApiSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [mounted, setMounted] = useState(false);
@@ -40,7 +41,7 @@ function App() {
   interface LabelData { emails: GmailMessage[]; nextPageToken: string | null; }
   const [labelCache, setLabelCache] = useState<Record<string, LabelData>>({});
 
-  const cacheKey = searchQuery ? `search:${searchQuery}` : activeLabel;
+  const cacheKey = apiSearchQuery ? `search:${apiSearchQuery}` : activeLabel;
   const currentData = labelCache[cacheKey];
   const emails = currentData?.emails || [];
   const nextPageToken = currentData?.nextPageToken || null;
@@ -128,7 +129,26 @@ function App() {
     setActiveLabel(tab);
     setView('inbox');
     setSelectedEmail(null);
-    setSearchQuery('');
+    setLocalSearchQuery('');
+    setApiSearchQuery('');
+    setSelectedIndex(0);
+  }, []);
+
+  const handleSearchInput = useCallback((q: string) => {
+    setLocalSearchQuery(q);
+    if (apiSearchQuery) setApiSearchQuery('');
+    setSelectedIndex(0);
+  }, [apiSearchQuery]);
+
+  const handleSearchSubmit = useCallback(() => {
+    if (!localSearchQuery.trim()) return;
+    setApiSearchQuery(localSearchQuery.trim());
+    setSelectedIndex(0);
+  }, [localSearchQuery]);
+
+  const handleSearchClear = useCallback(() => {
+    setLocalSearchQuery('');
+    setApiSearchQuery('');
     setSelectedIndex(0);
   }, []);
 
@@ -194,7 +214,10 @@ function App() {
 
       if (e.key === 'Escape') {
         e.preventDefault();
-        if (view === 'reader') goToInbox();
+        if (view === 'inbox' && (localSearchQuery || apiSearchQuery)) {
+          handleSearchClear();
+          (document.activeElement as HTMLElement)?.blur();
+        } else if (view === 'reader') goToInbox();
         else if (view === 'compose') goToInbox();
         return;
       }
@@ -221,7 +244,11 @@ function App() {
       }
 
       if (view === 'inbox') {
-        if (e.key === 'j') {
+        if (e.key === '/') {
+          e.preventDefault();
+          const searchInput = document.querySelector('.nav-search input') as HTMLInputElement;
+          searchInput?.focus();
+        } else if (e.key === 'j') {
           e.preventDefault();
           setSelectedIndex(i => Math.min(i + 1, emails.length - 1));
         } else if (e.key === 'k') {
@@ -278,7 +305,7 @@ function App() {
 
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [view, emails, selectedEmail, openEmail, startCompose, goToInbox, handleArchived, handleEmailUpdated, handleTabClick]);
+  }, [view, emails, selectedEmail, localSearchQuery, apiSearchQuery, openEmail, startCompose, goToInbox, handleArchived, handleEmailUpdated, handleTabClick, handleSearchClear]);
 
   // ── Derived state ──
   const inboxEmails = labelCache['inbox']?.emails || [];
@@ -337,9 +364,12 @@ function App() {
             activeLabel=${activeLabel}
             view=${view}
             tabCounts=${tabCounts}
-            searchQuery=${searchQuery}
+            searchQuery=${localSearchQuery}
+            apiSearchQuery=${apiSearchQuery}
             onTabClick=${handleTabClick}
-            onSearchChange=${setSearchQuery}
+            onSearchInput=${handleSearchInput}
+            onSearchSubmit=${handleSearchSubmit}
+            onSearchClear=${handleSearchClear}
             onCompose=${startCompose}
           />
         </div>
@@ -349,13 +379,16 @@ function App() {
             emails=${emails}
             cacheKey=${cacheKey}
             activeLabel=${activeLabel}
-            searchQuery=${searchQuery}
+            localSearchQuery=${localSearchQuery}
+            apiSearchQuery=${apiSearchQuery}
             nextPageToken=${nextPageToken}
             needsFetch=${!currentData}
             loading=${loading}
             onEmailsLoaded=${handleEmailsLoaded}
             onOpenEmail=${openEmail}
             onSetLoading=${setLoading}
+            onSearchSubmit=${handleSearchSubmit}
+            onSearchClear=${handleSearchClear}
             selectedIndex=${selectedIndex}
             inboxZeroBear=${html`<${InboxZeroBear} />`}
           />
@@ -381,7 +414,7 @@ function App() {
           />
         `}
 
-        <${Footer} view=${view} />
+        <${Footer} view=${view} hasActiveSearch=${!!(localSearchQuery || apiSearchQuery)} />
       </div>
     </div>
   `;

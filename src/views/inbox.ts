@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useMemo } from 'preact/hooks';
 import htm from 'htm';
 import { formatDate, Loading } from '../components/common.js';
 import { listMessages, batchGetMetadata, archiveMessage } from '../gmail.js';
@@ -8,17 +8,46 @@ import type { GmailMessage } from '../types.js';
 
 const html = htm.bind(h);
 
+const API_SEARCH_MAX_RESULTS = 10;
+
+function highlightMatch(text: string, query: string): any {
+  if (!query || !text) return text;
+  const lower = text.toLowerCase();
+  const qLower = query.toLowerCase();
+  const idx = lower.indexOf(qLower);
+  if (idx === -1) return text;
+
+  const before = text.slice(0, idx);
+  const match = text.slice(idx, idx + query.length);
+  const after = text.slice(idx + query.length);
+  return html`${before}<mark class="search-highlight">${match}</mark>${after}`;
+}
+
+function localFilter(emails: GmailMessage[], query: string): GmailMessage[] {
+  const q = query.toLowerCase();
+  return emails.filter(e =>
+    e.fromName.toLowerCase().includes(q) ||
+    e.from.toLowerCase().includes(q) ||
+    e.subject.toLowerCase().includes(q) ||
+    (e.body && e.body.toLowerCase().includes(q)) ||
+    (e.snippet && e.snippet.toLowerCase().includes(q))
+  );
+}
+
 interface InboxProps {
   emails: GmailMessage[];
   cacheKey: string;
   activeLabel: string;
-  searchQuery: string;
+  localSearchQuery: string;
+  apiSearchQuery: string;
   nextPageToken: string | null;
   needsFetch: boolean;
   loading: boolean;
   onEmailsLoaded: (cacheKey: string, emails: GmailMessage[], nextPageToken: string | null, append?: boolean) => void;
   onOpenEmail: (email: GmailMessage) => void;
   onSetLoading: (loading: boolean) => void;
+  onSearchSubmit: () => void;
+  onSearchClear: () => void;
   selectedIndex: number;
   inboxZeroBear: any;
 }
@@ -27,19 +56,32 @@ export function InboxView({
   emails,
   cacheKey,
   activeLabel,
-  searchQuery,
+  localSearchQuery,
+  apiSearchQuery,
   nextPageToken,
   needsFetch,
   loading,
   onEmailsLoaded,
   onOpenEmail,
   onSetLoading,
+  onSearchSubmit,
+  onSearchClear,
   selectedIndex,
   inboxZeroBear,
 }: InboxProps) {
   const [hoverRow, setHoverRow] = useState<string | null>(null);
   const [initialLoad, setInitialLoad] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const isLocalSearch = !!localSearchQuery && !apiSearchQuery;
+  const isApiSearch = !!apiSearchQuery;
+
+  const displayEmails = useMemo(() => {
+    if (isLocalSearch) return localFilter(emails, localSearchQuery);
+    return emails;
+  }, [emails, localSearchQuery, isLocalSearch]);
+
+  const searchHighlight = isLocalSearch ? localSearchQuery : '';
 
   const fetchInbox = async (pageToken?: string) => {
     onSetLoading(true);
@@ -54,10 +96,12 @@ export function InboxView({
       };
 
       const labelIds = labelMap[activeLabel] || ['INBOX'];
+      const maxResults = isApiSearch ? API_SEARCH_MAX_RESULTS : 25;
       const result = await listMessages(
-        searchQuery || undefined,
+        apiSearchQuery || undefined,
         pageToken,
-        labelIds
+        labelIds,
+        maxResults
       );
 
       if (result.messages.length === 0) {
@@ -124,7 +168,7 @@ export function InboxView({
   };
 
   if (loading && initialLoad) {
-    return html`<${Loading} message="fetching mail..." />`;
+    return html`<${Loading} message=${isApiSearch ? 'searching gmail...' : 'fetching mail...'} />`;
   }
 
   if (error && emails.length === 0) {
@@ -142,15 +186,41 @@ export function InboxView({
     `;
   }
 
-  if (emails.length === 0 && !loading) {
-    if (searchQuery) {
-      return html`
-        <div class="no-results fade-in">
-          <pre>${`  ʕ;ᴥ;ʔ ?`}</pre>
-          no results for "${searchQuery}"
+  // API search returned no results
+  if (isApiSearch && displayEmails.length === 0 && !loading) {
+    return html`
+      <div class="no-results fade-in">
+        <pre>${`  ʕ;ᴥ;ʔ ?`}</pre>
+        <div>no Gmail results for "${apiSearchQuery}"</div>
+        <button class="btn btn-secondary" style="margin-top: 12px;" onClick=${onSearchClear}>
+          ← back to ${activeLabel}
+        </button>
+      </div>
+    `;
+  }
+
+  // Local search with no matches — prompt to search via API
+  if (isLocalSearch && displayEmails.length === 0 && !loading) {
+    return html`
+      <div class="no-results fade-in">
+        <pre>${`  ʕ;ᴥ;ʔ`}</pre>
+        <div>no local matches for "${localSearchQuery}"</div>
+        <button
+          class="btn btn-secondary"
+          style="margin-top: 12px;"
+          onClick=${onSearchSubmit}
+        >
+          search all gmail (~2KB) →
+        </button>
+        <div class="search-hint" style="margin-top: 8px;">
+          or press enter in the search box
         </div>
-      `;
-    }
+      </div>
+    `;
+  }
+
+  // No emails at all (empty label)
+  if (displayEmails.length === 0 && !loading) {
     return html`
       <div>
         ${inboxZeroBear}
@@ -171,7 +241,22 @@ export function InboxView({
 
   return html`
     <div>
-      ${emails.map((email, i) => html`
+      ${isApiSearch && html`
+        <div class="search-results-header fade-in">
+          <span>Gmail results for "${apiSearchQuery}" · ${displayEmails.length} result${displayEmails.length !== 1 ? 's' : ''}</span>
+          <button class="btn btn-secondary btn-sm" onClick=${onSearchClear}>
+            ✕ clear
+          </button>
+        </div>
+      `}
+
+      ${isLocalSearch && html`
+        <div class="search-results-header fade-in">
+          <span>${displayEmails.length} of ${emails.length} loaded · press enter to search all gmail</span>
+        </div>
+      `}
+
+      ${displayEmails.map((email, i) => html`
         <div
           key=${email.id}
           class="inbox-row fade-in"
@@ -194,10 +279,14 @@ export function InboxView({
 
           <div class="inbox-content">
             <span class="inbox-from ${email.isUnread ? 'unread' : 'read'}">
-              ${email.fromName || email.from}
+              ${searchHighlight
+                ? highlightMatch(email.fromName || email.from, searchHighlight)
+                : (email.fromName || email.from)}
             </span>
             <span class="inbox-subject ${email.isUnread ? 'unread' : 'read'}">
-              ${email.subject}
+              ${searchHighlight
+                ? highlightMatch(email.subject, searchHighlight)
+                : email.subject}
             </span>
           </div>
 
@@ -216,7 +305,7 @@ export function InboxView({
         </div>
       `)}
 
-      ${(nextPageToken || loading) && html`
+      ${!isLocalSearch && !isApiSearch && (nextPageToken || loading) && html`
         <div class="inbox-load-more">
           <button
             class="btn btn-secondary"
@@ -224,6 +313,29 @@ export function InboxView({
             disabled=${loading}
           >
             ${loading ? 'loading...' : 'load more ↓ (~4KB)'}
+          </button>
+        </div>
+      `}
+
+      ${isLocalSearch && html`
+        <div class="inbox-load-more">
+          <button
+            class="btn btn-secondary"
+            onClick=${onSearchSubmit}
+          >
+            search all gmail for "${localSearchQuery}" (~2KB) →
+          </button>
+        </div>
+      `}
+
+      ${isApiSearch && (nextPageToken || loading) && html`
+        <div class="inbox-load-more">
+          <button
+            class="btn btn-secondary"
+            onClick=${handleLoadMore}
+            disabled=${loading}
+          >
+            ${loading ? 'loading...' : 'load more results ↓ (~2KB)'}
           </button>
         </div>
       `}

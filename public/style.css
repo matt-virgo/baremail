@@ -262,9 +262,50 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   color: var(--mid-text);
   font-family: var(--font);
   font-size: 12px;
-  padding: 6px 10px 6px 26px;
+  padding: 6px 26px 6px 26px;
   width: 160px;
   border-radius: 0;
+}
+
+.nav-search.active-search input {
+  border-color: var(--amber-dim);
+}
+
+.nav-search-clear {
+  position: absolute;
+  right: 4px;
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-family: var(--font);
+  line-height: 1;
+}
+.nav-search-clear:hover { color: var(--amber); }
+
+/* ── Search Results ── */
+.search-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+  color: var(--dim-text);
+  font-size: 11px;
+}
+
+.search-highlight {
+  background: color-mix(in srgb, var(--amber) 25%, transparent);
+  color: var(--amber-bright);
+  border-radius: 1px;
+  padding: 0 1px;
+}
+
+.search-hint {
+  color: var(--border);
+  font-size: 10px;
 }
 
 /* ── Inbox ── */

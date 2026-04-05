@@ -7,9 +7,10 @@ const html = htm.bind(h);
 
 interface FooterProps {
   view: View;
+  hasActiveSearch?: boolean;
 }
 
-export function Footer({ view }: FooterProps) {
+export function Footer({ view, hasActiveSearch }: FooterProps) {
   const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
   return html`
@@ -21,6 +22,8 @@ export function Footer({ view }: FooterProps) {
           <${KeyHint} keys="e" label="archive" />
           <${KeyHint} keys="s" label="star" />
           <${KeyHint} keys="c" label="compose" />
+          <${KeyHint} keys="/" label="search" />
+          ${hasActiveSearch && html`<${KeyHint} keys="esc" label="clear search" />`}
         `}
         ${view === 'reader' && html`
           <${KeyHint} keys="r" label="reply" />

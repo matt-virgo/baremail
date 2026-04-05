@@ -9,12 +9,15 @@ interface NavProps {
   view: View;
   tabCounts: Record<string, number>;
   searchQuery: string;
+  apiSearchQuery: string;
   onTabClick: (tab: string) => void;
-  onSearchChange: (q: string) => void;
+  onSearchInput: (q: string) => void;
+  onSearchSubmit: () => void;
+  onSearchClear: () => void;
   onCompose: () => void;
 }
 
-export function Nav({ activeLabel, view, tabCounts, searchQuery, onTabClick, onSearchChange, onCompose }: NavProps) {
+export function Nav({ activeLabel, view, tabCounts, searchQuery, apiSearchQuery, onTabClick, onSearchInput, onSearchSubmit, onSearchClear, onCompose }: NavProps) {
   const countLabel = (id: string) => {
     const count = tabCounts[id];
     return count ? ` (${count})` : '';
@@ -27,6 +30,14 @@ export function Nav({ activeLabel, view, tabCounts, searchQuery, onTabClick, onS
     { id: 'drafts', label: `drafts${countLabel('drafts')}`, icon: '◫' },
     { id: 'compose', label: 'compose', icon: '+' },
   ];
+
+  const handleSearchKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onSearchSubmit();
+      (e.target as HTMLInputElement).blur();
+    }
+  };
 
   return html`
     <nav class="nav">
@@ -42,14 +53,18 @@ export function Nav({ activeLabel, view, tabCounts, searchQuery, onTabClick, onS
       `)}
       <div class="nav-spacer" />
       ${view === 'inbox' && html`
-        <div class="nav-search">
+        <div class="nav-search ${apiSearchQuery ? 'active-search' : ''}">
           <span class="nav-search-icon">⌕</span>
           <input
             type="text"
             placeholder="search..."
             value=${searchQuery}
-            onInput=${(e: Event) => onSearchChange((e.target as HTMLInputElement).value)}
+            onInput=${(e: Event) => onSearchInput((e.target as HTMLInputElement).value)}
+            onKeyDown=${handleSearchKeyDown}
           />
+          ${(searchQuery || apiSearchQuery) && html`
+            <button class="nav-search-clear" onClick=${onSearchClear}>✕</button>
+          `}
         </div>
       `}
     </nav>
