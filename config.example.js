@@ -16,6 +16,5 @@
 
 window.BAREMAIL_CONFIG = {
   GOOGLE_CLIENT_ID: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
-  GOOGLE_CLIENT_SECRET: 'YOUR_CLIENT_SECRET',
   GOOGLE_REDIRECT_URI: window.location.origin,
 };

@@ -175,3 +175,25 @@ export async function setPref(key: string, value: unknown): Promise<void> {
   const store = await tx(STORE_PREFS, 'readwrite');
   await idbRequest(store.put({ key, value }));
 }
+
+export async function deletePref(key: string): Promise<void> {
+  const store = await tx(STORE_PREFS, 'readwrite');
+  await idbRequest(store.delete(key));
+}
+
+export async function clearAllData(): Promise<void> {
+  if (dbInstance) {
+    dbInstance.close();
+    dbInstance = null;
+  }
+
+  await new Promise<void>((resolve) => {
+    const req = indexedDB.deleteDatabase(DB_NAME);
+    req.onsuccess = () => resolve();
+    req.onerror = () => resolve();
+    req.onblocked = () => resolve();
+  });
+
+  const names = await caches.keys();
+  await Promise.all(names.map(name => caches.delete(name)));
+}

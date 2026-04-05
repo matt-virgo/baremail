@@ -108,6 +108,12 @@ export async function getMessage(id: string): Promise<GmailMessage> {
 
 // ── Send message ──
 
+export interface SendAttachment {
+  name: string;
+  mimeType: string;
+  data: string; // base64
+}
+
 export async function sendMessage(
   to: string,
   subject: string,
@@ -117,24 +123,55 @@ export async function sendMessage(
     bcc?: string;
     threadId?: string;
     inReplyTo?: string;
+    attachments?: SendAttachment[];
   }
 ): Promise<string> {
-  const lines: string[] = [
+  const hasAttachments = options?.attachments && options.attachments.length > 0;
+  const boundary = `baremail_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+  const headers: string[] = [
     `To: ${to}`,
     `Subject: ${subject}`,
-    'Content-Type: text/plain; charset=utf-8',
     'MIME-Version: 1.0',
   ];
 
-  if (options?.cc) lines.push(`Cc: ${options.cc}`);
-  if (options?.bcc) lines.push(`Bcc: ${options.bcc}`);
+  if (options?.cc) headers.push(`Cc: ${options.cc}`);
+  if (options?.bcc) headers.push(`Bcc: ${options.bcc}`);
   if (options?.inReplyTo) {
-    lines.push(`In-Reply-To: ${options.inReplyTo}`);
-    lines.push(`References: ${options.inReplyTo}`);
+    headers.push(`In-Reply-To: ${options.inReplyTo}`);
+    headers.push(`References: ${options.inReplyTo}`);
   }
 
-  lines.push('', body);
-  const raw = lines.join('\r\n');
+  let raw: string;
+
+  if (hasAttachments) {
+    headers.push(`Content-Type: multipart/mixed; boundary="${boundary}"`);
+    const parts: string[] = [
+      headers.join('\r\n'),
+      '',
+      `--${boundary}`,
+      'Content-Type: text/plain; charset=utf-8',
+      '',
+      body,
+    ];
+
+    for (const att of options!.attachments!) {
+      parts.push(
+        `--${boundary}`,
+        `Content-Type: ${att.mimeType}; name="${att.name}"`,
+        `Content-Disposition: attachment; filename="${att.name}"`,
+        'Content-Transfer-Encoding: base64',
+        '',
+        att.data,
+      );
+    }
+
+    parts.push(`--${boundary}--`);
+    raw = parts.join('\r\n');
+  } else {
+    headers.push('Content-Type: text/plain; charset=utf-8');
+    raw = headers.join('\r\n') + '\r\n\r\n' + body;
+  }
 
   const encoded = btoa(unescape(encodeURIComponent(raw)))
     .replace(/\+/g, '-')

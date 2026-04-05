@@ -113,7 +113,12 @@ export function InboxView({
   };
 
   const handleLoadMore = () => {
-    if (nextPageToken) fetchInbox(nextPageToken);
+    if (emails.length === 0) {
+      onEmailsLoaded(cacheKey, [], null);
+      fetchInbox();
+    } else if (nextPageToken) {
+      fetchInbox(nextPageToken);
+    }
   };
 
   if (loading && initialLoad) {
@@ -144,7 +149,22 @@ export function InboxView({
         </div>
       `;
     }
-    return inboxZeroBear;
+    return html`
+      <div>
+        ${inboxZeroBear}
+        ${nextPageToken && html`
+          <div class="inbox-load-more" style="margin-top: 16px;">
+            <button
+              class="btn btn-secondary"
+              onClick=${handleLoadMore}
+              disabled=${loading}
+            >
+              ${loading ? 'loading...' : 'load more ↓ (~4KB)'}
+            </button>
+          </div>
+        `}
+      </div>
+    `;
   }
 
   return html`

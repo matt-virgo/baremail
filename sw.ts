@@ -134,11 +134,38 @@ self.addEventListener('sync', (event: any) => {
   }
 });
 
+async function getTokenFromIDB(): Promise<string | null> {
+  const DB_NAME = 'baremail';
+  try {
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+
+    const tx = db.transaction('prefs', 'readonly');
+    const store = tx.objectStore('prefs');
+    const result = await new Promise<any>((resolve, reject) => {
+      const req = store.get('auth_tokens');
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+
+    db.close();
+    return result?.value?.access_token || null;
+  } catch {
+    return null;
+  }
+}
+
 async function flushOutbox(): Promise<void> {
   const DB_NAME = 'baremail';
   const STORE_OUTBOX = 'outbox';
 
   try {
+    const token = await getTokenFromIDB();
+    if (!token) return;
+
     const db = await new Promise<IDBDatabase>((resolve, reject) => {
       const req = indexedDB.open(DB_NAME, 1);
       req.onsuccess = () => resolve(req.result);
@@ -153,11 +180,6 @@ async function flushOutbox(): Promise<void> {
       allReq.onsuccess = () => resolve(allReq.result || []);
       allReq.onerror = () => reject(allReq.error);
     });
-
-    const tokenStr = localStorage.getItem('baremail_tokens');
-    if (!tokenStr) return;
-    const tokenData = JSON.parse(tokenStr);
-    const token = tokenData.access_token;
 
     for (const msg of messages) {
       try {

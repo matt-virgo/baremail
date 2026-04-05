@@ -9,12 +9,12 @@ const isStart = process.argv.includes('--start');
 const dist = 'dist';
 if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
 
-function copyPublic() {
+function copyPublic(includeConfig = true) {
   const publicDir = 'public';
   for (const file of readdirSync(publicDir)) {
     copyFileSync(join(publicDir, file), join(dist, file));
   }
-  if (existsSync('config.js')) {
+  if (includeConfig && existsSync('config.js')) {
     copyFileSync('config.js', join(dist, 'config.js'));
   }
 }
@@ -89,6 +89,9 @@ if (isStart) {
 } else {
   await esbuild.build(appBuild);
   await esbuild.build(swBuild);
-  copyPublic();
+  copyPublic(false);
+  copyFileSync('config.example.js', join(dist, 'config.js'));
   console.log('  ʕ·ᴥ·ʔ build complete → dist/');
+  console.log('  ⚠ dist/config.js contains placeholder credentials.');
+  console.log('    Replace with your real config.js before deploying.');
 }

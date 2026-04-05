@@ -1,4 +1,5 @@
 import { getConfig } from './config.js';
+import { getPref, setPref, deletePref, clearAllData } from './cache.js';
 
 const SCOPES = [
   'https://www.googleapis.com/auth/gmail.readonly',
@@ -6,7 +7,7 @@ const SCOPES = [
   'https://www.googleapis.com/auth/gmail.modify',
 ].join(' ');
 
-const TOKEN_KEY = 'baremail_tokens';
+const TOKEN_PREF_KEY = 'auth_tokens';
 
 interface TokenData {
   access_token: string;
@@ -102,7 +103,6 @@ export async function handleOAuthCallback(): Promise<boolean> {
       body: new URLSearchParams({
         code,
         client_id: config.GOOGLE_CLIENT_ID,
-        client_secret: config.GOOGLE_CLIENT_SECRET,
         redirect_uri: config.GOOGLE_REDIRECT_URI,
         grant_type: 'authorization_code',
         code_verifier: codeVerifier,
@@ -125,7 +125,7 @@ export async function handleOAuthCallback(): Promise<boolean> {
       id_token: data.id_token,
     };
 
-    persistTokens();
+    await persistTokens();
     scheduleRefresh();
 
     sessionStorage.removeItem('baremail_code_verifier');
@@ -158,7 +158,6 @@ async function refreshAccessToken(): Promise<boolean> {
       body: new URLSearchParams({
         refresh_token: tokenData.refresh_token,
         client_id: config.GOOGLE_CLIENT_ID,
-        client_secret: config.GOOGLE_CLIENT_SECRET,
         grant_type: 'refresh_token',
       }),
     });
@@ -172,7 +171,7 @@ async function refreshAccessToken(): Promise<boolean> {
       expires_at: Date.now() + (data.expires_in * 1000) - 60000,
     };
 
-    persistTokens();
+    await persistTokens();
     scheduleRefresh();
     return true;
   } catch {
@@ -188,23 +187,22 @@ function scheduleRefresh() {
   refreshTimer = setTimeout(() => refreshAccessToken(), delay);
 }
 
-function persistTokens() {
+async function persistTokens(): Promise<void> {
   if (!tokenData) return;
   try {
-    localStorage.setItem(TOKEN_KEY, JSON.stringify(tokenData));
+    await setPref(TOKEN_PREF_KEY, tokenData);
   } catch {
     // Storage may be unavailable
   }
 }
 
-function loadPersistedTokens(): boolean {
+async function loadPersistedTokens(): Promise<boolean> {
   try {
-    const stored = localStorage.getItem(TOKEN_KEY);
-    if (!stored) return false;
+    const data = await getPref<TokenData | null>(TOKEN_PREF_KEY, null);
+    if (!data) return false;
 
-    const data: TokenData = JSON.parse(stored);
     if (data.expires_at < Date.now() && !data.refresh_token) {
-      localStorage.removeItem(TOKEN_KEY);
+      await deletePref(TOKEN_PREF_KEY);
       return false;
     }
 
@@ -235,16 +233,20 @@ export function isAuthenticated(): boolean {
   return tokenData !== null;
 }
 
-export function initAuth(): boolean {
+export async function initAuth(): Promise<boolean> {
   return loadPersistedTokens();
 }
 
-export function logout() {
+export async function logout(): Promise<void> {
   tokenData = null;
   if (refreshTimer) clearTimeout(refreshTimer);
-  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem('baremail_tokens');
+  await clearAllData();
 }
 
+// Parsed without signature verification — used only for display, never for
+// authorization decisions. The token comes directly from Google's token
+// endpoint over TLS, so tampering is not a practical concern.
 export function getUserEmail(): string | null {
   if (!tokenData?.id_token) return null;
   try {

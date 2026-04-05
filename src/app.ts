@@ -14,6 +14,10 @@ import { ReaderView } from './views/reader.js';
 import { ComposeView } from './views/compose.js';
 import type { View, GmailMessage, ComposeData, ConnectionStatus } from './types.js';
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
 const html = htm.bind(h);
 
 const EMPTY_COMPOSE: ComposeData = { to: '', cc: '', bcc: '', subject: '', body: '' };
@@ -51,7 +55,7 @@ function App() {
       document.documentElement.setAttribute('data-theme', initialTheme);
 
       const callbackHandled = await handleOAuthCallback();
-      if (callbackHandled || initAuth()) {
+      if (callbackHandled || await initAuth()) {
         setView('inbox');
       }
 
@@ -175,8 +179,8 @@ function App() {
     setOutboxCount(count);
   }, [goToInbox]);
 
-  const handleLogout = useCallback(() => {
-    logout();
+  const handleLogout = useCallback(async () => {
+    await logout();
     setView('login');
     setLabelCache({});
     setSelectedEmail(null);

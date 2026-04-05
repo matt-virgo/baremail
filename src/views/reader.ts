@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import htm from 'htm';
+import DOMPurify from 'dompurify';
 import { TypewriterText, Loading, formatFullDate, formatBytes } from '../components/common.js';
 import {
   getMessage,
@@ -191,7 +192,11 @@ export function ReaderView({ email, onBack, onReply, onForward, onEmailUpdated, 
       ${showHtml && displayEmail.bodyHtml ? html`
         <div
           class="reader-body"
-          dangerouslySetInnerHTML=${{ __html: displayEmail.bodyHtml }}
+          dangerouslySetInnerHTML=${{ __html: DOMPurify.sanitize(displayEmail.bodyHtml, {
+            FORBID_TAGS: ['style', 'form'],
+            FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
+            ALLOW_DATA_ATTR: false,
+          }) }}
         />
         <button class="btn btn-ghost" style="margin-top: 8px; font-size: 11px;" onClick=${() => setShowHtml(false)}>
           ← plain text
