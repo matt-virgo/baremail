@@ -1,6 +1,6 @@
-# BareMail ʕ·ᴥ·ʔ
+# BAREmail ʕ·ᴥ·ʔ
 
-**Email's bare necessities.** A minimal Gmail PWA for low-bandwidth environments — airplane wifi, rural connections, developing regions, or any situation where Gmail's full interface is too heavy.
+**Email's bare necessities.** A minimalist Gmail client for low-bandwidth environments — airplane wifi, rural connections, developing regions, or any situation where Gmail's full interface is too heavy.
 
 ```
   ʕ·ᴥ·ʔ
@@ -8,9 +8,9 @@
   ── email's bare necessities ──
 ```
 
-## What is this?
+## What is BAREmail?
 
-BareMail is a Progressive Web App that talks directly to the Gmail API. The entire app shell is under 200KB gzipped, cached by a service worker, and then the only network traffic is Gmail API JSON — the UI itself costs zero bytes on repeat visits.
+BAREmail is a Progressive Web App that talks directly to the Gmail API. The entire app shell is under 200KB gzipped, cached by a service worker, and then the only network traffic is Gmail API JSON — the UI itself costs zero bytes on repeat visits.
 
 - **App shell: ~60KB** gzipped (Preact + HTM + your styles and logic)
 - **Inbox load: ~3-5KB** of API data for 25 messages
@@ -49,10 +49,10 @@ BareMail is a Progressive Web App that talks directly to the Gmail API. The enti
 1. Navigate to **APIs & Services → OAuth consent screen**
 2. Select User type: **External**, then click **Create**
 3. Fill in the required fields:
-   - App name: `BareMail` (or anything you like)
+   - App name: `BAREmail` (or anything you like)
    - User support email: your email
    - Developer contact: your email
-4. Click **Save and Continue** through the Scopes step (no changes needed -- BareMail requests scopes at runtime)
+4. Click **Save and Continue** through the Scopes step (no changes needed -- BAREmail requests scopes at runtime)
 5. On the **Test users** step, click **Add users** and add your Gmail address (e.g. `you@gmail.com`)
 6. Click **Save and Continue**, then **Back to Dashboard**
 
@@ -63,12 +63,12 @@ BareMail is a Progressive Web App that talks directly to the Gmail API. The enti
 1. Navigate to **APIs & Services → Credentials**
 2. Click **Create Credentials → OAuth client ID**
 3. Application type: **Web application**
-4. Name: `BareMail` (or anything)
+4. Name: `BAREmail` (or anything)
 5. Under **Authorized JavaScript origins**, add: `http://localhost:3000`
 6. Under **Authorized redirect URIs**, add: `http://localhost:3000`
 7. Click **Create** and copy both the **Client ID** and **Client secret**
 
-### 5. Configure BareMail
+### 5. Configure BAREmail
 
 ```bash
 cp config.example.js config.js
@@ -95,11 +95,11 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000), sign in with Google, and then **install the PWA** (see below).
 
-> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BareMail (unsafe)** to continue. This warning only appears because the app is in testing mode -- your data still goes directly to Google's API, never through a third party.
+> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. This warning only appears because the app is in testing mode -- your data still goes directly to Google's API, never through a third party.
 
 ### 7. Install as a PWA (use from your dock)
 
-BareMail is designed to be used as an installed app, not a browser tab. Once installed, the service worker caches everything locally — the app launches instantly from your dock and API calls go directly to Gmail. No server needed after installation.
+BAREmail is designed to be used as an installed app, not a browser tab. Once installed, the service worker caches everything locally — the app launches instantly from your dock and API calls go directly to Gmail. No server needed after installation.
 
 **Chrome (recommended):**
 1. Visit `http://localhost:3000`
@@ -110,12 +110,12 @@ BareMail is designed to be used as an installed app, not a browser tab. Once ins
 **Safari (macOS Sonoma+):**
 1. Visit `http://localhost:3000`
 2. Go to **File → Add to Dock**
-3. BareMail appears in your dock
+3. BAREmail appears in your dock
 
 **After installation:**
-- Just click the BareMail icon in your dock — it opens in its own window, no browser chrome
+- Just click the BAREmail icon in your dock — it opens in its own window, no browser chrome
 - The service worker serves the app from cache, so it launches instantly even if `npm start` isn't running
-- To **update** the app after pulling new code: run `npm start` once, open BareMail, and the service worker will pick up the new version in the background
+- To **update** the app after pulling new code: run `npm start` once, open BAREmail, and the service worker will pick up the new version in the background
 
 ## Scripts
 
@@ -130,7 +130,7 @@ BareMail is designed to be used as an installed app, not a browser tab. Once ins
 
 For personal use, `npm start` + PWA install is all you need. If you want to host it on a public URL:
 
-BareMail is just static files — deploy the `dist/` folder anywhere:
+BAREmail is just static files — deploy the `dist/` folder anywhere:
 
 - **Cloudflare Pages:** connect your repo, build command `npm run build`, publish directory `dist`
 - **Netlify / Vercel:** same setup
@@ -163,7 +163,7 @@ Browser
 
 ## Privacy
 
-BareMail runs entirely in your browser. There is no backend server. Your emails go directly between your browser and Google's Gmail API. No data is ever sent to a third party.
+BAREmail runs entirely in your browser. There is no backend server. Your emails go directly between your browser and Google's Gmail API. No data is ever sent to a third party.
 
 OAuth tokens are stored locally. The app requests only the minimum scopes needed: read, send, and modify (for marking read/unread and archiving).
 
