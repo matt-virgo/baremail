@@ -201,3 +201,7 @@ OAuth tokens are stored locally. The app requests only the minimum scopes needed
 ## License
 
 MIT — see [LICENSE](LICENSE)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=matt-virgo/baremail&type=Date)](https://star-history.com/#matt-virgo/baremail&Date)
