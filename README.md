@@ -207,9 +207,11 @@ MIT — see [LICENSE](LICENSE)
 If BAREmail saved you from staring at a loading spinner on airplane wifi, consider buying the bear a coffee:
 
 ```
-    ( o.o )
-    ( > 🍵< )
-     ʕ·ᴥ·ʔ
+             ♨
+      ʕ·ᴥ·ʔ C[_]
+      |    |/
+      |    |    thx for the coffee!
+     /|    |\
 ```
 
 <a href="https://www.buymeacoffee.com/mzschwartz88"><img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
