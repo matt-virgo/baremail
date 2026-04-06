@@ -9,7 +9,7 @@ function loadFromLocalStorage(): BaremailConfig | null {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (parsed.GOOGLE_CLIENT_ID && !parsed.GOOGLE_CLIENT_ID.includes('YOUR_CLIENT_ID')) {
+    if (parsed.GOOGLE_CLIENT_ID?.endsWith('.apps.googleusercontent.com')) {
       return {
         GOOGLE_CLIENT_ID: parsed.GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET: parsed.GOOGLE_CLIENT_SECRET || undefined,
@@ -59,7 +59,7 @@ export function clearConfig(): void {
 export function isConfigured(): boolean {
   try {
     const c = getConfig();
-    return c.GOOGLE_CLIENT_ID !== '' && !c.GOOGLE_CLIENT_ID.includes('YOUR_CLIENT_ID');
+    return c.GOOGLE_CLIENT_ID.endsWith('.apps.googleusercontent.com');
   } catch {
     return false;
   }

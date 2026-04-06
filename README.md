@@ -127,6 +127,52 @@ BAREMAIL is designed to be used as an installed app, not a browser tab. Once ins
 - The service worker serves the app from cache, so it launches instantly even if `npm start` isn't running
 - To **update** the app after pulling new code: run `npm start` once, open BAREMAIL, and the service worker will pick up the new version in the background
 
+### Install on iPhone / iPad
+
+PWAs require HTTPS, so you'll need to tunnel your local server to get a public URL. [ngrok](https://ngrok.com) is the simplest way.
+
+**One-time setup:**
+
+1. Install ngrok:
+   ```bash
+   brew install ngrok    # macOS
+   # or download from https://ngrok.com/download
+   ```
+2. Create a free account at [ngrok.com](https://ngrok.com) and run:
+   ```bash
+   ngrok config add-authtoken YOUR_TOKEN
+   ```
+
+**Expose your local server:**
+
+1. Make sure BAREMAIL is running (`npm start`)
+2. In a separate terminal:
+   ```bash
+   ngrok http 3000
+   ```
+3. Copy the `https://xxxx.ngrok-free.app` URL from the output
+
+**Add the ngrok URL to Google OAuth:**
+
+1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials)
+2. Click on your OAuth client ID
+3. Add the ngrok URL to both **Authorized JavaScript origins** and **Authorized redirect URIs**
+4. Click **Save**
+
+**Install on your phone:**
+
+1. Open **Safari** on your iPhone (must be Safari — other browsers on iOS don't support PWA installation)
+2. Navigate to your `https://xxxx.ngrok-free.app` URL
+3. If ngrok shows an interstitial page, tap through it
+4. BAREMAIL will show the setup wizard — enter the same **Client ID** and **Client Secret** you used on your computer
+5. Sign in with Google
+6. Tap the **Share** button (square with arrow) → **"Add to Home Screen"** → **"Add"**
+7. Open BAREMAIL from your home screen — it will show the setup wizard one more time (iOS uses separate storage for home screen apps). Enter your credentials again and sign in.
+
+After that, BAREMAIL is fully installed. The service worker caches everything locally, so the app will keep working even after you shut down ngrok. You only need ngrok again to push new versions of the app to your phone.
+
+> **Note:** ngrok's free tier generates a new URL each time you restart it. If you restart ngrok, you'll need to update your Google OAuth credentials with the new URL and re-add the PWA on your phone.
+
 ## Scripts
 
 | Command | Description |

@@ -91,6 +91,7 @@ const STEPS = [
         <li>click <strong>create</strong></li>
         <li>you'll see a dialog with your <strong>client ID</strong> and <strong>client secret</strong> — keep this open for the next step</li>
       </ol>
+      <p style="margin-top: 12px; opacity: 0.8; font-size: 12px;">📱 <strong>setting up on mobile?</strong> also add your ngrok/tunnel URL to both authorized origins and redirect URIs.</p>
     `,
     troubleTitle: 'getting a "configure consent screen first" error?',
     troubleBody: 'go back to step 3 and make sure you completed the consent screen setup. you need to click through all the way to "back to dashboard" before creating credentials.',
@@ -101,6 +102,7 @@ const STEPS = [
     linkLabel: null,
     instructions: html`
       <p>paste the client ID and client secret from the dialog you just saw. BAREMAIL stores these locally in your browser — they never leave your machine.</p>
+      <p style="margin-top: 8px; opacity: 0.8; font-size: 12px;">📱 <strong>setting up on a new device?</strong> enter the same client ID and secret from your existing google cloud project.</p>
     `,
     troubleTitle: 'where do i find these?',
     troubleBody: 'go to APIs & Services → Credentials in the cloud console. click on the OAuth client you just created to see the client ID and secret again.',
