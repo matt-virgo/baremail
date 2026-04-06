@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#1a1410">
-  <meta name="description" content="About BAREmail — built by Matt, inspired by airplane wifi frustration.">
-  <title>About — BAREmail ʕ·ᴥ·ʔ</title>
+  <meta name="description" content="About BAREMAIL — built by Matt, inspired by airplane wifi frustration.">
+  <title>About — BAREMAIL ʕ·ᴥ·ʔ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -36,24 +36,21 @@
     <section class="about fade-in fade-in-1">
       <div class="section-label">── about ──</div>
       <div class="about-text">
-        <p>My name is Matt. By day I run a startup called <a href="https://virgo.health">Virgo</a> that's building AI for endoscopy to solve diseases mediated by the gut. By night I like to hack away on fun side projects.</p>
-        <p>BAREmail was inspired by my own frustration just trying to get a few emails taken care of with spotty airplane wifi.</p>
+        <p>My name is Matt. By day I run a startup called <a href="https://virgosvs.com">Virgo</a> that's building AI for endoscopy to solve diseases mediated by the gut. By night I like to hack away on fun side projects.</p>
+        <p>BAREMAIL was inspired by my own frustration just trying to get a few emails taken care of with spotty airplane wifi.</p>
         <p>Gmail's web interface transfers megabytes on every load. On a connection throttled to 50–200 Kbps — the kind you get at 35,000 feet — that means 30–60 second load times, frequent timeouts, and an essentially unusable experience. All to read a few text emails and send a short reply.</p>
-        <p>So I built BAREmail: a Gmail client where the entire UI fits in ~60KB, caches itself permanently, and the only thing that travels over the wire is your actual email content. A few kilobytes per inbox load. A couple kilobytes per message.</p>
+        <p>So I built BAREMAIL: a Gmail client where the entire UI fits in ~60KB, caches itself permanently, and the only thing that travels over the wire is your actual email content. A few kilobytes per inbox load. A couple kilobytes per message.</p>
         <p>It's open source, has no backend, and your data never touches a third party. Just you, your browser, and Gmail's API.</p>
       </div>
 
-      <div class="about-bear" aria-hidden="true">      ,--,
-     |  '-----,
-  ʕ·ᴥ·ʔ       |
-  /|    |\     |
- ~~~~~~~~~~~~~~o~~~
-  bear is fishing. building things.</div>
+      <div class="about-bear" aria-hidden="true"><pre id="fishingBear" style="display:inline-block;margin:0;font-family:var(--font);font-size:12px;line-height:1.35;color:var(--amber-dim);"></pre>
+        <div style="color:var(--dim-text);font-size:11px;margin-top:6px;">bear is fishing. building things.</div>
+      </div>
 
       <div class="about-cta">
         <a href="https://github.com/matt-virgo/baremail" class="cta-btn">View on GitHub</a>
-        <br>
-        <a href="/" class="cta-secondary">← back to home</a>
+        <a href="https://www.buymeacoffee.com/mzschwartz88" class="cta-btn">Buy Me a Coffee ☕</a>
+        <a href="/" class="cta-secondary" style="width:100%">← back to home</a>
       </div>
     </section>
 
@@ -65,7 +62,7 @@
         <a href="https://github.com/matt-virgo/baremail">github</a>
         <a href="https://www.buymeacoffee.com/mzschwartz88">support</a>
       </div>
-      <div class="footer-copy">MIT © 2026 BAREmail ʕ·ᴥ·ʔ</div>
+      <div class="footer-copy">MIT © 2026 BAREMAIL ʕ·ᴥ·ʔ</div>
     </footer>
   </div>
 
@@ -85,6 +82,22 @@
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('baremail-theme', next);
     }
+
+    (function () {
+      var frames = [
+        "     ,--,\n     |  '-----,\n  ʕ·ᴥ·ʔ       |\n  /|    |\\     |\n ~~~~~~~~~~~~~~o~~~",
+        "     ,--,\n     |  '-----,\n  ʕ·ᴥ·ʔ       |\n  /|    |\\     o\n ~~~~~~~~~~~~~~~~~~~~",
+        "     ,--,\n     |  '----,\n  ʕᵔᴥᵔʔ     ><>\n  /|    |\\\n ~~~~~~~~~~~~~~~~~~~~"
+      ];
+      var el = document.getElementById('fishingBear');
+      if (!el) return;
+      var i = 0;
+      el.textContent = frames[0];
+      setInterval(function () {
+        i = (i + 1) % frames.length;
+        el.textContent = frames[i];
+      }, 800);
+    })();
   </script>
 </body>
 </html>

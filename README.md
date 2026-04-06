@@ -1,16 +1,16 @@
-# BAREmail ʕ·ᴥ·ʔ
+# BAREMAIL ʕ·ᴥ·ʔ
 
 **Email's bare necessities.** A minimalist Gmail client for low-bandwidth environments — airplane wifi, rural connections, developing regions, or any situation where Gmail's full interface is too heavy.
 
 ```
   ʕ·ᴥ·ʔ
-  BAREmail
+  BAREMAIL
   ── email's bare necessities ──
 ```
 
-## What is BAREmail?
+## What is BAREMAIL?
 
-BAREmail is a Progressive Web App that talks directly to the Gmail API. The entire app shell is under 200KB gzipped, cached by a service worker, and then the only network traffic is Gmail API JSON — the UI itself costs zero bytes on repeat visits.
+BAREMAIL is a Progressive Web App that talks directly to the Gmail API. The entire app shell is under 200KB gzipped, cached by a service worker, and then the only network traffic is Gmail API JSON — the UI itself costs zero bytes on repeat visits.
 
 - **App shell: ~60KB** gzipped (Preact + HTM + your styles and logic)
 - **Inbox load: ~3-5KB** of API data for 25 messages
@@ -42,7 +42,7 @@ npm start
 Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizard walks you through connecting to Gmail:
 
 ```
-  ʕ·ᴥ·ʔ  BAREmail
+  ʕ·ᴥ·ʔ  BAREMAIL
 
   ʕ·ᴥ·ʔ setup guide                     ~3 minutes
   ● ○ ○ ○ ○ ○
@@ -53,7 +53,7 @@ Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizar
   │                                             │
   │  click the link below to create a new       │
   │  google cloud project. name it anything     │
-  │  you like (e.g. "baremail").                │
+  │  you like (e.g. "BAREMAIL").                │
   │                                             │
   │  ┌───────────────────────────────┐          │
   │  │ open google cloud console →   │          │
@@ -68,7 +68,9 @@ Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizar
 
 The wizard has 6 steps — each one opens the exact Google Cloud page you need, tells you what to click, and lets you paste your credentials directly into the app. No config files to edit.
 
-> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. Your data still goes directly to Google's API, never through a third party.
+**Video walkthrough:** [Watch the setup wizard in action](https://youtu.be/dmzs4mWzizU)
+
+> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREMAIL (unsafe)** to continue. Your data still goes directly to Google's API, never through a third party.
 
 <details>
 <summary><strong>Alternative setup methods</strong></summary>
@@ -107,23 +109,23 @@ window.BAREMAIL_CONFIG = {
 
 ### Install as a PWA (use from your dock)
 
-BAREmail is designed to be used as an installed app, not a browser tab. Once installed, the service worker caches everything locally — the app launches instantly from your dock and API calls go directly to Gmail. No server needed after installation.
+BAREMAIL is designed to be used as an installed app, not a browser tab. Once installed, the service worker caches everything locally — the app launches instantly from your dock and API calls go directly to Gmail. No server needed after installation.
 
 **Chrome (recommended):**
 1. Visit `http://localhost:3000`
 2. Click the **⋮** menu (top-right) → **Cast, save, and share** → **Install page as app...**
    - Alternatively, look for the install icon (⊕) in the address bar — but this doesn't always appear
-3. BAREmail now appears in your dock, Launchpad, and Spotlight
+3. BAREMAIL now appears in your dock, Launchpad, and Spotlight
 
 **Safari (macOS Sonoma+):**
 1. Visit `http://localhost:3000`
 2. Go to **File → Add to Dock**
-3. BAREmail appears in your dock
+3. BAREMAIL appears in your dock
 
 **After installation:**
-- Just click the BAREmail icon in your dock — it opens in its own window, no browser chrome
+- Just click the BAREMAIL icon in your dock — it opens in its own window, no browser chrome
 - The service worker serves the app from cache, so it launches instantly even if `npm start` isn't running
-- To **update** the app after pulling new code: run `npm start` once, open BAREmail, and the service worker will pick up the new version in the background
+- To **update** the app after pulling new code: run `npm start` once, open BAREMAIL, and the service worker will pick up the new version in the background
 
 ## Scripts
 
@@ -139,7 +141,7 @@ BAREmail is designed to be used as an installed app, not a browser tab. Once ins
 
 For personal use, `npm start` + PWA install is all you need. If you want to host it on a public URL:
 
-BAREmail is just static files — deploy the `dist/` folder anywhere:
+BAREMAIL is just static files — deploy the `dist/` folder anywhere:
 
 - **Cloudflare Pages:** connect your repo, build command `npm run build`, publish directory `dist`
 - **Netlify / Vercel:** same setup
@@ -172,7 +174,7 @@ Browser
 
 ## Privacy
 
-BAREmail runs entirely in your browser. There is no backend server. Your emails go directly between your browser and Google's Gmail API. No data is ever sent to a third party.
+BAREMAIL runs entirely in your browser. There is no backend server. Your emails go directly between your browser and Google's Gmail API. No data is ever sent to a third party.
 
 OAuth tokens are stored locally. The app requests only the minimum scopes needed: read, send, and modify (for marking read/unread and archiving).
 
@@ -212,7 +214,7 @@ Your OAuth credentials are missing the redirect URI. Go to [Credentials](https:/
 Double-check that you copied the full Client ID (it ends with `.apps.googleusercontent.com`). If using `config.js`, make sure the file is saved and you restarted the server.
 
 **"Google hasn't verified this app"**
-This is expected. Click **Advanced** → **Go to BAREmail (unsafe)**. This warning appears because your app is in testing mode. Your data still goes directly to Google's API.
+This is expected. Click **Advanced** → **Go to BAREMAIL (unsafe)**. This warning appears because your app is in testing mode. Your data still goes directly to Google's API.
 
 ## Contributing
 
@@ -227,7 +229,7 @@ MIT — see [LICENSE](LICENSE)
 
 ## Support
 
-If BAREmail saved you from staring at a loading spinner on airplane wifi, consider buying the bear a coffee:
+If BAREMAIL saved you from staring at a loading spinner on airplane wifi, consider buying the bear a coffee:
 
 ```
       ʕ·ᴥ·ʔ ☕

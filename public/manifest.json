@@ -1,6 +1,6 @@
 {
-  "name": "BAREmail ʕ·ᴥ·ʔ",
-  "short_name": "BAREmail ʕ·ᴥ·ʔ",
+  "name": "BAREMAIL ʕ·ᴥ·ʔ",
+  "short_name": "BAREMAIL ʕ·ᴥ·ʔ",
   "description": "Email's bare necessities — a minimal Gmail client for low-bandwidth environments",
   "start_url": "/",
   "scope": "/",

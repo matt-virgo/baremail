@@ -37,7 +37,7 @@ export function Footer({ view, hasActiveSearch }: FooterProps) {
         `}
       </div>
       <span class="footer-version">
-        baremail v0.1.0 · ʕ·ᴥ·ʔ · ${now}
+        BAREMAIL v0.1.0 · ʕ·ᴥ·ʔ · ${now}
       </span>
     </footer>
   `;

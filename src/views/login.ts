@@ -13,7 +13,7 @@ const ASCII_LOGO = `╭──────────────────╮
 │   ██╔══██╗██╔══██║██╔══██╗██╔══╝     │
 │   ██████╔╝██║  ██║██║  ██║███████╗   │
 │   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝   │
-│              m  a  i  l              │
+│              M  A  I  L              │
 ╰──────────────────╯`;
 
 const TOTAL_STEPS = 6;
@@ -24,7 +24,7 @@ const STEPS = [
     link: 'https://console.cloud.google.com/projectcreate',
     linkLabel: 'open google cloud console →',
     instructions: html`
-      <p>click the link below to create a new google cloud project. name it anything you like (e.g. "baremail").</p>
+      <p>click the link below to create a new google cloud project. name it anything you like (e.g. "BAREMAIL").</p>
       <p>if you already have a project you want to use, you can skip this step.</p>
     `,
     troubleTitle: 'need a google account?',
@@ -48,7 +48,7 @@ const STEPS = [
       <p>this tells google what your app is:</p>
       <ol class="wizard-instructions">
         <li>click the blue <strong>get started</strong> button</li>
-        <li>app name: <strong>BAREmail</strong> (or anything)</li>
+        <li>app name: <strong>BAREMAIL</strong> (or anything)</li>
         <li>user support email: <strong>your email</strong> → click <strong>next</strong></li>
         <li>audience: select <strong>external</strong> → click <strong>next</strong></li>
         <li>contact email: <strong>your email</strong> → click <strong>next</strong></li>
@@ -81,11 +81,11 @@ const STEPS = [
     link: 'https://console.cloud.google.com/apis/credentials/oauthclient',
     linkLabel: 'open credentials page →',
     instructions: html`
-      <p>create the credentials baremail needs to connect to gmail:</p>
+      <p>create the credentials BAREMAIL needs to connect to gmail:</p>
       <ol class="wizard-instructions">
         <li>click <strong>+ create client</strong></li>
         <li>application type: <strong>web application</strong></li>
-        <li>name: <strong>BAREmail</strong> (or anything)</li>
+        <li>name: <strong>BAREMAIL</strong> (or anything)</li>
         <li>authorized javascript origins: add <strong>http://localhost:3000</strong></li>
         <li>authorized redirect URIs: add <strong>http://localhost:3000</strong></li>
         <li>click <strong>create</strong></li>
@@ -100,7 +100,7 @@ const STEPS = [
     link: null,
     linkLabel: null,
     instructions: html`
-      <p>paste the client ID and client secret from the dialog you just saw. baremail stores these locally in your browser — they never leave your machine.</p>
+      <p>paste the client ID and client secret from the dialog you just saw. BAREMAIL stores these locally in your browser — they never leave your machine.</p>
     `,
     troubleTitle: 'where do i find these?',
     troubleBody: 'go to APIs & Services → Credentials in the cloud console. click on the OAuth client you just created to see the client ID and secret again.',
@@ -244,7 +244,7 @@ export function LoginView() {
       <div class="login login-compact fade-in">
         <div class="login-brand-row">
           <span class="login-brand-bear">ʕ·ᴥ·ʔ</span>
-          <span class="login-brand-name">BAREmail</span>
+          <span class="login-brand-name">BAREMAIL</span>
         </div>
         <p class="login-compact-desc">
           a minimal gmail client for bad wifi. read, reply, and compose — all under 200KB. your data never touches a third-party server.
@@ -292,12 +292,12 @@ export function LoginView() {
       <div class="login-privacy">
         <span class="login-privacy-bear">ʕ·ᴥ·ʔ</span>
         <span class="login-privacy-body">
-          baremail runs entirely in your browser.<br/>
+          BAREMAIL runs entirely in your browser.<br/>
           no backend. no tracking. no data collection.<br/>
           emails go directly between you and gmail's api.
         </span>
         <span class="login-privacy-footer">
-          open source · MIT license · baremail.app
+          open source · MIT license · BAREMAIL.app
         </span>
       </div>
     </div>

@@ -9,7 +9,7 @@ import type { ComposeData, OutboxMessage } from '../types.js';
 
 const html = htm.bind(h);
 
-const BAREMAIL_FOOTER = '\n\nʕ·ᴥ·ʔ sent with baremail — email for bad wifi — baremail.app';
+const BAREMAIL_FOOTER = '\n\nʕ·ᴥ·ʔ sent with BAREMAIL — email for bad wifi — baremail.app';
 
 interface ComposeProps {
   data: ComposeData;

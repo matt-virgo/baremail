@@ -1,4 +1,4 @@
-/* BAREmail Marketing — style.css
+/* BAREMAIL Marketing — style.css
    Amber terminal aesthetic, mirrored from the app. */
 
 /* ── Theme tokens ── */
@@ -506,6 +506,11 @@ a:hover { color: var(--amber-bright); }
   margin-top: 32px;
   padding-top: 24px;
   border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ── Animations ── */
