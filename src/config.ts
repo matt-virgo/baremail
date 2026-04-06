@@ -51,6 +51,11 @@ export function getConfig(): BaremailConfig {
   );
 }
 
+export function clearConfig(): void {
+  localStorage.removeItem(LS_KEY);
+  config = null;
+}
+
 export function isConfigured(): boolean {
   try {
     const c = getConfig();

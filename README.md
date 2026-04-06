@@ -34,57 +34,52 @@ BAREmail is a Progressive Web App that talks directly to the Gmail API. The enti
 
 ## Quick Start (~3 minutes)
 
-> **Easiest path:** run `npm install && npm start`, open [http://localhost:3000](http://localhost:3000), and the built-in setup wizard will walk you through everything step by step — no need to read ahead. The steps below are for reference.
-
-### 1. Create a Google Cloud project
-
-1. Open the [Create Project](https://console.cloud.google.com/projectcreate) page
-2. Name it anything (e.g. `BAREmail`) and click **Create**
-
-### 2. Enable the Gmail API
-
-1. Open the [Gmail API](https://console.cloud.google.com/apis/library/gmail.googleapis.com) page
-2. Select your project from the dropdown at the top, then click **Enable**
-
-### 3. Configure the OAuth consent screen
-
-1. Open the [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent)
-2. Select User type: **External**, then click **Create**
-3. Fill in the required fields:
-   - App name: `BAREmail` (or anything you like)
-   - User support email: your email
-   - Developer contact: your email
-4. Click **Save and Continue** through the Scopes step (no changes needed)
-5. On the **Test users** step, click **Add users** and add your Gmail address (e.g. `you@gmail.com`)
-6. Click **Save and Continue**, then **Back to Dashboard**
-
-> **Important:** Your app starts in "Testing" mode. Only email addresses you add as test users can sign in. Without this step, you'll see "Access blocked: has not completed the Google verification process."
-
-### 4. Create OAuth credentials
-
-1. Open the [Create OAuth client](https://console.cloud.google.com/apis/credentials/oauthclient) page
-2. Application type: **Web application**
-3. Name: `BAREmail` (or anything)
-4. Under **Authorized JavaScript origins**, add: `http://localhost:3000`
-5. Under **Authorized redirect URIs**, add: `http://localhost:3000`
-6. Click **Create** and copy both the **Client ID** and **Client secret**
-
-### 5. Install and run
-
 ```bash
 npm install
 npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000). If you followed the in-app wizard, you're done — sign in with Google. Otherwise, paste your credentials into the wizard or use one of these alternatives:
+Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizard walks you through connecting to Gmail:
 
-**Option A — CLI setup (interactive):**
+```
+  ʕ·ᴥ·ʔ  BAREmail
+
+  ʕ·ᴥ·ʔ setup guide                     ~3 minutes
+  ● ○ ○ ○ ○ ○
+  step 1 of 6
+
+  ┌─────────────────────────────────────────────┐
+  │  create a google cloud project              │
+  │                                             │
+  │  click the link below to create a new       │
+  │  google cloud project. name it anything     │
+  │  you like (e.g. "baremail").                │
+  │                                             │
+  │  ┌───────────────────────────────┐          │
+  │  │ open google cloud console →   │          │
+  │  └───────────────────────────────┘          │
+  │                                             │
+  │  ▸ need a google account?                   │
+  └─────────────────────────────────────────────┘
+              ┌──────────────────────┐
+              │  done, next step →   │
+              └──────────────────────┘
+```
+
+The wizard has 6 steps — each one opens the exact Google Cloud page you need, tells you what to click, and lets you paste your credentials directly into the app. No config files to edit.
+
+> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. Your data still goes directly to Google's API, never through a third party.
+
+<details>
+<summary><strong>Alternative setup methods</strong></summary>
+
+**CLI setup (interactive):**
 ```bash
 npm run setup
 ```
-This opens each Google Cloud page for you and writes `config.js` automatically.
+Opens each Google Cloud page in your browser and prompts for credentials in the terminal. Writes `config.js` automatically.
 
-**Option B — Manual config file:**
+**Manual config file:**
 ```bash
 cp config.example.js config.js
 ```
@@ -97,11 +92,20 @@ window.BAREMAIL_CONFIG = {
 };
 ```
 
-> **Note on the client secret:** This is visible in the source code, which is expected for browser-based apps using Google's "Web application" OAuth type. The PKCE flow protects against authorization code interception, and the secret alone can't access anyone's data without user consent. The app also enforces a Content Security Policy that prevents third-party scripts from running.
+> **Note on the client secret:** This is visible in the source code, which is expected for browser-based apps using Google's "Web application" OAuth type. The PKCE flow protects against authorization code interception, and the secret alone can't access anyone's data without user consent.
 
-> On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREmail (unsafe)** to continue. This warning only appears because the app is in testing mode — your data still goes directly to Google's API, never through a third party.
+**Manual steps reference:**
 
-### 7. Install as a PWA (use from your dock)
+1. [Create a Google Cloud project](https://console.cloud.google.com/projectcreate)
+2. [Enable the Gmail API](https://console.cloud.google.com/apis/library/gmail.googleapis.com)
+3. [Configure OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent) — select External, fill in app name + emails
+4. [Add yourself as a test user](https://console.cloud.google.com/auth/audience) — scroll to Test Users, add your Gmail address
+5. [Create OAuth credentials](https://console.cloud.google.com/apis/credentials/oauthclient) — Web application, add `http://localhost:3000` to origins and redirect URIs
+6. Paste Client ID and Client Secret into the app or `config.js`
+
+</details>
+
+### Install as a PWA (use from your dock)
 
 BAREmail is designed to be used as an installed app, not a browser tab. Once installed, the service worker caches everything locally — the app launches instantly from your dock and API calls go directly to Gmail. No server needed after installation.
 

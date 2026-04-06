@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useState, useCallback } from 'preact/hooks';
 import htm from 'htm';
 import { login } from '../auth.js';
-import { isConfigured, saveConfig } from '../config.js';
+import { isConfigured, saveConfig, clearConfig } from '../config.js';
 
 const html = htm.bind(h);
 
@@ -16,7 +16,7 @@ const ASCII_LOGO = `╭──────────────────╮
 │              m  a  i  l              │
 ╰──────────────────╯`;
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 const STEPS = [
   {
@@ -28,7 +28,7 @@ const STEPS = [
       <p>if you already have a project you want to use, you can skip this step.</p>
     `,
     troubleTitle: 'need a google account?',
-    troubleBody: 'you need a google account to create a cloud project. any gmail account works — the project is free and no billing is required.',
+    troubleBody: html`you need a google account to create a cloud project. any gmail account works — the project is free and no billing is required. <a href="https://accounts.google.com/" target="_blank" rel="noopener" style="color: var(--amber-dim);">create one here</a>.`,
   },
   {
     title: 'enable the gmail API',
@@ -45,19 +45,36 @@ const STEPS = [
     link: 'https://console.cloud.google.com/apis/credentials/consent',
     linkLabel: 'open consent screen settings →',
     instructions: html`
-      <p>this tells google what your app is. fill in these fields:</p>
+      <p>this tells google what your app is:</p>
       <ol class="wizard-instructions">
-        <li>select user type: <strong>external</strong>, then click create</li>
+        <li>click the blue <strong>get started</strong> button</li>
         <li>app name: <strong>BAREmail</strong> (or anything)</li>
-        <li>user support email: <strong>your email</strong></li>
-        <li>developer contact: <strong>your email</strong></li>
-        <li>click <strong>save and continue</strong> through scopes (no changes needed)</li>
-        <li>on test users, click <strong>add users</strong> and enter your gmail address</li>
-        <li>click <strong>save and continue</strong>, then <strong>back to dashboard</strong></li>
+        <li>user support email: <strong>your email</strong> → click <strong>next</strong></li>
+        <li>audience: select <strong>external</strong> → click <strong>next</strong></li>
+        <li>contact email: <strong>your email</strong> → click <strong>next</strong></li>
+        <li>agree to terms → click <strong>continue</strong></li>
+        <li>click <strong>create</strong></li>
       </ol>
     `,
-    troubleTitle: 'why do i need to add myself as a test user?',
-    troubleBody: 'your app starts in "testing" mode, which means only emails you explicitly add as test users can sign in. without this, you\'ll see "access blocked" when trying to log in.',
+    troubleTitle: 'what is the consent screen for?',
+    troubleBody: 'the consent screen is what users see when they sign in. since you\'re the only user, the details don\'t matter much — just fill in the required fields and move on.',
+  },
+  {
+    title: 'add yourself as a test user',
+    link: 'https://console.cloud.google.com/auth/audience',
+    linkLabel: 'open audience page →',
+    instructions: html`
+      <p><strong>this step is required</strong> — without it, you'll get "access blocked" when signing in.</p>
+      <ol class="wizard-instructions">
+        <li>click the link below to open the <strong>audience</strong> page</li>
+        <li>scroll down to <strong>test users</strong></li>
+        <li>click <strong>+ add users</strong></li>
+        <li>enter your gmail address (e.g. <strong>you@gmail.com</strong>)</li>
+        <li>click <strong>save</strong></li>
+      </ol>
+    `,
+    troubleTitle: 'why is this needed?',
+    troubleBody: 'your app starts in "testing" mode, which means only emails you explicitly add as test users can sign in. this is a google requirement — you can\'t skip it.',
   },
   {
     title: 'create OAuth credentials',
@@ -66,6 +83,7 @@ const STEPS = [
     instructions: html`
       <p>create the credentials baremail needs to connect to gmail:</p>
       <ol class="wizard-instructions">
+        <li>click <strong>+ create client</strong></li>
         <li>application type: <strong>web application</strong></li>
         <li>name: <strong>BAREmail</strong> (or anything)</li>
         <li>authorized javascript origins: add <strong>http://localhost:3000</strong></li>
@@ -205,6 +223,7 @@ function SetupWizard({ onComplete }: { onComplete: () => void }) {
 
 export function LoginView() {
   const [configured, setConfigured] = useState(isConfigured());
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleLogin = () => {
     login();
@@ -214,15 +233,21 @@ export function LoginView() {
     setConfigured(true);
   }, []);
 
+  const handleResetConfirm = useCallback(() => {
+    setShowResetConfirm(false);
+    clearConfig();
+    setConfigured(false);
+  }, []);
+
   if (!configured) {
     return html`
-      <div class="login fade-in">
-        <div class="login-bear">ʕ·ᴥ·ʔ</div>
-        <pre class="login-logo">${ASCII_LOGO}</pre>
-        <p class="login-desc">
-          a minimal gmail client for bad wifi.<br/>
-          read, reply, and compose — all under 200KB.<br/>
-          your data never touches a third-party server.
+      <div class="login login-compact fade-in">
+        <div class="login-brand-row">
+          <span class="login-brand-bear">ʕ·ᴥ·ʔ</span>
+          <span class="login-brand-name">BAREmail</span>
+        </div>
+        <p class="login-compact-desc">
+          a minimal gmail client for bad wifi. read, reply, and compose — all under 200KB. your data never touches a third-party server.
         </p>
         <${SetupWizard} onComplete=${handleWizardComplete} />
       </div>
@@ -243,6 +268,26 @@ export function LoginView() {
       <button class="btn btn-primary" onClick=${handleLogin} style="padding: 12px 32px; font-size: 13px;">
         sign in with google →
       </button>
+
+      <button class="login-reset-link" onClick=${() => setShowResetConfirm(true)}>
+        reset oauth config
+      </button>
+
+      ${showResetConfirm && html`
+        <div class="modal-overlay" onClick=${() => setShowResetConfirm(false)}>
+          <div class="modal" onClick=${(e: Event) => e.stopPropagation()}>
+            <div class="modal-title">reset oauth config?</div>
+            <div class="modal-body">
+              <p>this will remove your saved Google OAuth credentials from this browser. you'll need to go through the setup wizard again to sign back in.</p>
+              <p>your Google Cloud project and credentials are <strong>not</strong> deleted — only the local reference to them.</p>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-secondary" onClick=${() => setShowResetConfirm(false)}>cancel</button>
+              <button class="btn btn-primary modal-btn-danger" onClick=${handleResetConfirm}>reset config</button>
+            </div>
+          </div>
+        </div>
+      `}
 
       <div class="login-privacy">
         <span class="login-privacy-bear">ʕ·ᴥ·ʔ</span>

@@ -49,19 +49,23 @@ function App() {
   // ── Init ──
   useEffect(() => {
     (async () => {
-      const savedTheme = await getPref<'dark' | 'light'>('theme', 'dark');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-      setTheme(initialTheme);
-      document.documentElement.setAttribute('data-theme', initialTheme);
+      try {
+        const savedTheme = await getPref<'dark' | 'light'>('theme', 'dark');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        setTheme(initialTheme);
+        document.documentElement.setAttribute('data-theme', initialTheme);
 
-      const callbackHandled = await handleOAuthCallback();
-      if (callbackHandled || await initAuth()) {
-        setView('inbox');
+        const callbackHandled = await handleOAuthCallback();
+        if (callbackHandled || await initAuth()) {
+          setView('inbox');
+        }
+
+        const count = await getOutboxCount();
+        setOutboxCount(count);
+      } catch (err) {
+        console.error('Init error:', err);
       }
-
-      const count = await getOutboxCount();
-      setOutboxCount(count);
 
       setTimeout(() => setMounted(true), 100);
     })();
@@ -205,6 +209,7 @@ function App() {
     setLabelCache({});
     setSelectedEmail(null);
   }, []);
+
 
   // ── Keyboard shortcuts ──
   useEffect(() => {

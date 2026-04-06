@@ -1,5 +1,6 @@
 node_modules/
 dist/
 config.js
+config.js.bak
 *.log
 .DS_Store

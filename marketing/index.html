@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a1410">
+  <meta name="description" content="BAREmail — email's bare necessities. A minimalist, open-source Gmail client for low-bandwidth environments like airplane wifi.">
+  <meta property="og:title" content="BAREmail — email's bare necessities">
+  <meta property="og:description" content="A minimalist, open-source Gmail client for airplane wifi, rural connections, and anywhere bandwidth is scarce.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://baremail.app">
+  <title>BAREmail ʕ·ᴥ·ʔ — email's bare necessities</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐻</text></svg>">
+</head>
+<body>
+  <div class="crt-scanlines"></div>
+  <div class="crt-vignette"></div>
+
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-bear">ʕ·ᴥ·ʔ</div>
+      <div class="header-wordmark">BAREMAIL</div>
+      <div class="header-tagline">── email's bare necessities ──</div>
+    </header>
+
+    <!-- Nav -->
+    <nav class="topnav">
+      <a href="/" class="active">home</a>
+      <a href="/about">about</a>
+      <div class="topnav-spacer"></div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">◐ theme</button>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero fade-in fade-in-1">
+      <p class="hero-pitch">A minimalist Gmail client built for spotty connections.</p>
+      <p class="hero-sub">
+        Airplane wifi. Rural networks. Developing regions. Anywhere Gmail's
+        multi-megabyte interface refuses to load — BAREmail gets your email
+        through in kilobytes.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">~60KB</div>
+          <div class="hero-stat-label">APP SHELL</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">~3KB</div>
+          <div class="hero-stat-label">INBOX LOAD</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">0 bytes</div>
+          <div class="hero-stat-label">REPEAT VISITS</div>
+        </div>
+      </div>
+      <div style="margin-top: 28px;">
+        <a href="https://github.com/matt-virgo/baremail" class="cta-btn">View on GitHub</a>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="benefits fade-in fade-in-2">
+      <div class="section-label">── why baremail ──</div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">⚡</div>
+          <div class="benefit-title">Tiny app shell</div>
+          <div class="benefit-desc">The entire UI is under 60KB gzipped. Cached by a service worker on first visit — zero bytes on every visit after.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">✈</div>
+          <div class="benefit-title">Offline-first</div>
+          <div class="benefit-desc">Read cached emails with no connection. Compose and queue messages in the outbox — they send automatically when you're back online.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌐</div>
+          <div class="benefit-title">Zero install</div>
+          <div class="benefit-desc">Works in any modern browser. Install as a PWA to launch from your dock — no app store, no downloads.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🔒</div>
+          <div class="benefit-title">Privacy-first</div>
+          <div class="benefit-desc">No backend server. Your emails go directly between your browser and Google's Gmail API. No data ever touches a third party.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">⌨</div>
+          <div class="benefit-title">Keyboard-driven</div>
+          <div class="benefit-desc">Navigate with j/k, open with o, compose with c, reply with r, archive with e. Vim-style flow for power users.</div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">◐</div>
+          <div class="benefit-title">Light + Dark</div>
+          <div class="benefit-desc">Respects your system preference. Toggle anytime. The amber terminal aesthetic looks great either way.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Source -->
+    <section class="opensource fade-in fade-in-3">
+      <div class="opensource-heading">BAREmail is open source</div>
+      <div class="opensource-text">
+        MIT licensed. Self-host it, fork it, contribute to it. The entire
+        codebase is designed to stay small, readable, and dependency-light.
+        Every PR must keep the app shell under 200KB.
+      </div>
+      <div class="disco-scene" aria-hidden="true">
+        <div class="disco-ball" id="discoBall"></div>
+        <pre class="disco-bear" id="discoBear"></pre>
+      </div>
+      <a href="https://github.com/matt-virgo/baremail" class="cta-btn">View on GitHub</a>
+      <br>
+      <a href="https://github.com/matt-virgo/baremail#quick-start-3-minutes" class="cta-secondary">Get started in ~3 minutes</a>
+    </section>
+
+    <!-- Buy Bear a Coffee -->
+    <section class="coffee fade-in fade-in-4">
+      <div class="coffee-heading">Buy the bear a coffee</div>
+      <div class="coffee-bear" aria-hidden="true">     ʕ·ᴥ·ʔ ☕
+     |    |/
+     |    |    thx for the coffee!
+    /|    |\</div>
+      <p class="opensource-text" style="margin-bottom: 20px;">
+        If BAREmail saved you from staring at a loading spinner on airplane
+        wifi, consider supporting the project.
+      </p>
+      <a href="https://www.buymeacoffee.com/mzschwartz88" class="coffee-btn">☕ Buy Me A Coffee</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/">home</a>
+        <a href="/about">about</a>
+        <a href="https://github.com/matt-virgo/baremail">github</a>
+        <a href="https://www.buymeacoffee.com/mzschwartz88">support</a>
+      </div>
+      <div class="footer-copy">MIT © 2026 BAREmail ʕ·ᴥ·ʔ</div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var stored = localStorage.getItem('baremail-theme');
+      if (stored) {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('baremail-theme', next);
+    }
+
+    // Disco bear animation
+    (function () {
+      var ballFrames = [
+        "    ✦\n   /|\\\n  ✧·✧\n   \\|/\n    |",
+        "    ✧\n   /|\\\n  ✦·✦\n   \\|/\n    |",
+        "    *\n   /|\\\n  ✧·✧\n   \\|/\n    |",
+        "    ✦\n   /|\\\n  *·*\n   \\|/\n    |"
+      ];
+      var bearFrames = [
+        " \\ʕ·ᴥ·ʔ/\n  |    |\n  /|  |\\\n / |  | \\",
+        "  ʕ·ᴥ·ʔ\\\n  |    |\n  /|  |\\\n /    | \\",
+        " /ʕ·ᴥ·ʔ\n  |    |\n  /|  |\\\n / |    \\",
+        "  ʕ·ᴥ·ʔ\n \\|    |/\n  |    |\n  /\\  /\\"
+      ];
+      var sparkles = ['✦', '✧', '*', '·', '⋆'];
+      var ball = document.getElementById('discoBall');
+      var bear = document.getElementById('discoBear');
+      var scene = document.querySelector('.disco-scene');
+      if (!ball || !bear || !scene) return;
+
+      var frame = 0;
+      function animate() {
+        ball.textContent = ballFrames[frame % ballFrames.length];
+        bear.textContent = bearFrames[frame % bearFrames.length];
+        frame++;
+      }
+
+      // Floating sparkles
+      function addSparkle() {
+        var el = document.createElement('span');
+        el.className = 'disco-sparkle';
+        el.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
+        el.style.left = (10 + Math.random() * 80) + '%';
+        el.style.top = (10 + Math.random() * 60) + '%';
+        el.style.animationDelay = (Math.random() * 0.5) + 's';
+        el.style.animationDuration = (1 + Math.random() * 1.5) + 's';
+        scene.appendChild(el);
+        setTimeout(function () { el.remove(); }, 2500);
+      }
+
+      animate();
+      setInterval(animate, 600);
+      setInterval(addSparkle, 400);
+    })();
+  </script>
+</body>
+</html>

@@ -551,6 +551,23 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   line-height: 1.8;
 }
 
+.login-reset-link {
+  display: block;
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  margin: 14px auto 0;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.login-reset-link:hover {
+  color: var(--red);
+}
+
 .login-privacy {
   color: var(--dim-text);
   font-size: 11px;
@@ -582,6 +599,42 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   color: var(--amber-dim);
   font-size: 10px;
   letter-spacing: 2px;
+}
+
+/* ── Login compact (wizard mode) ── */
+.login-compact {
+  padding: 24px 0 40px;
+}
+
+.login-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.login-brand-bear {
+  color: var(--amber);
+  font-size: 18px;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--amber) 30%, transparent);
+}
+
+.login-brand-name {
+  color: var(--amber);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--amber) 25%, transparent);
+}
+
+.login-compact-desc {
+  color: var(--dim-text);
+  font-size: 11px;
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto 20px;
+  line-height: 1.7;
 }
 
 /* ── Setup Wizard ── */
@@ -1104,6 +1157,63 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
 
 .account-popover-logout:hover {
   color: var(--red);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeSlideIn 0.15s ease both;
+}
+
+.modal {
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  max-width: 420px;
+  width: calc(100% - 32px);
+  padding: 24px;
+}
+
+.modal-title {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.modal-body {
+  color: var(--mid-text);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.modal-body p {
+  margin: 0 0 8px;
+}
+
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-btn-danger {
+  background: var(--red);
+  color: var(--bg);
+}
+
+.modal-btn-danger:hover {
+  filter: brightness(1.15);
 }
 
 /* ── Theme toggle ── */
