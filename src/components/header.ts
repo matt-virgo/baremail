@@ -15,9 +15,10 @@ interface HeaderProps {
   onToggleTheme: () => void;
   userEmail: string | null;
   onLogout: () => void;
+  onRefresh: () => void;
 }
 
-export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes, theme, onToggleTheme, userEmail, onLogout }: HeaderProps) {
+export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes, theme, onToggleTheme, userEmail, onLogout, onRefresh }: HeaderProps) {
   const [showAccount, setShowAccount] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +46,7 @@ export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes,
       <div class="header-brand">
         <div class="header-bear">ʕ·ᴥ·ʔ</div>
         <div class="header-wordmark">
-          BARE<span class="header-wordmark-sub">mail</span>
+          BAREMAIL
         </div>
         <div class="header-tagline">── email's bare necessities ──</div>
       </div>
@@ -55,7 +56,8 @@ export function Header({ connectionStatus, unreadCount, totalEmails, totalBytes,
             <${StatusDot} status=${connectionStatus} />
             ${statusText}
           </button>
-          ${' · '}${inboxText}
+          ${' · '}${inboxText}${' '}
+          <button class="header-refresh-btn" onClick=${onRefresh} title="refresh inbox">↻</button>
           ${showAccount && html`
             <div class="account-popover">
               ${userEmail && html`

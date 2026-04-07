@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState, useEffect, useMemo } from 'preact/hooks';
+import { useState, useEffect, useMemo, useRef } from 'preact/hooks';
 import htm from 'htm';
 import { formatDate, Loading } from '../components/common.js';
 import { listMessages, batchGetMetadata, archiveMessage } from '../gmail.js';
@@ -43,6 +43,7 @@ interface InboxProps {
   nextPageToken: string | null;
   needsFetch: boolean;
   loading: boolean;
+  refreshTrigger: number;
   onEmailsLoaded: (cacheKey: string, emails: GmailMessage[], nextPageToken: string | null, append?: boolean) => void;
   onOpenEmail: (email: GmailMessage) => void;
   onSetLoading: (loading: boolean) => void;
@@ -61,6 +62,7 @@ export function InboxView({
   nextPageToken,
   needsFetch,
   loading,
+  refreshTrigger,
   onEmailsLoaded,
   onOpenEmail,
   onSetLoading,
@@ -112,12 +114,14 @@ export function InboxView({
       }
 
       const ids = result.messages.map(m => m.id);
-      const metadata = await batchGetMetadata(ids, (_loaded, _total, partial) => {
-        onEmailsLoaded(key, partial, result.nextPageToken, !!pageToken);
-      });
+      const isLoadMore = !!pageToken;
+      const progressCb = isLoadMore ? undefined : (_loaded: number, _total: number, partial: GmailMessage[]) => {
+        onEmailsLoaded(key, partial, result.nextPageToken, false);
+      };
+      const metadata = await batchGetMetadata(ids, progressCb);
       await cacheMessages(metadata);
 
-      onEmailsLoaded(key, metadata, result.nextPageToken, !!pageToken);
+      onEmailsLoaded(key, metadata, result.nextPageToken, isLoadMore);
     } catch (err) {
       console.error('Failed to fetch inbox:', err);
       setError(String(err));
@@ -143,6 +147,13 @@ export function InboxView({
     setInitialLoad(true);
     fetchInbox();
   }, [cacheKey, needsFetch]);
+
+  const lastRefreshRef = useRef(refreshTrigger);
+  useEffect(() => {
+    if (refreshTrigger === lastRefreshRef.current) return;
+    lastRefreshRef.current = refreshTrigger;
+    fetchInbox();
+  }, [refreshTrigger]);
 
   const handleArchive = async (e: Event, email: GmailMessage) => {
     e.stopPropagation();

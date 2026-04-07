@@ -1116,6 +1116,21 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   color: var(--amber-dim);
 }
 
+.header-refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--dim-text);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.15s;
+}
+
+.header-refresh-btn:hover {
+  color: var(--amber-dim);
+}
+
 .account-popover {
   position: absolute;
   top: calc(100% + 6px);
@@ -1280,9 +1295,17 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
 
   .inbox-actions { display: none; }
 
+  .nav { flex-wrap: wrap; }
   .nav-tab { padding: 10px 10px; font-size: 11px; }
+  .nav-spacer { display: none; }
+  .nav-search {
+    flex: 1 1 100%;
+    padding: 6px 0 8px;
+    border-top: 1px solid color-mix(in srgb, var(--border) 25%, transparent);
+  }
+  .nav-search input { width: 100%; }
 
-  .nav-search input { width: 120px; }
+  .key-hint { display: none; }
 
   .header-wordmark { letter-spacing: 8px; font-size: 18px; }
 

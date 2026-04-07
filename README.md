@@ -66,7 +66,7 @@ Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizar
               └──────────────────────┘
 ```
 
-The wizard has 6 steps — each one opens the exact Google Cloud page you need, tells you what to click, and lets you paste your credentials directly into the app. No config files to edit.
+The wizard has 7 steps (one optional) — each one opens the exact Google Cloud page you need, tells you what to click, and lets you paste your credentials directly into the app. No config files to edit.
 
 **Video walkthrough:** [Watch the setup wizard in action](https://youtu.be/dmzs4mWzizU)
 
@@ -102,8 +102,9 @@ window.BAREMAIL_CONFIG = {
 2. [Enable the Gmail API](https://console.cloud.google.com/apis/library/gmail.googleapis.com)
 3. [Configure OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent) — select External, fill in app name + emails
 4. [Add yourself as a test user](https://console.cloud.google.com/auth/audience) — scroll to Test Users, add your Gmail address
-5. [Create OAuth credentials](https://console.cloud.google.com/apis/credentials/oauthclient) — Web application, add `http://localhost:3000` to origins and redirect URIs
-6. Paste Client ID and Client Secret into the app or `config.js`
+5. *(Optional)* Set up ngrok for mobile — see [Install on iPhone / iPad](#install-on-iphone--ipad) below
+6. [Create OAuth credentials](https://console.cloud.google.com/apis/credentials/oauthclient) — Web application, add `http://localhost:3000` to origins and redirect URIs (plus your ngrok URL if using mobile)
+7. Paste Client ID and Client Secret into the app or `config.js`
 
 </details>
 

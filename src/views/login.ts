@@ -16,7 +16,7 @@ const ASCII_LOGO = `╭──────────────────╮
 │              M  A  I  L              │
 ╰──────────────────╯`;
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 
 const STEPS = [
   {
@@ -77,6 +77,24 @@ const STEPS = [
     troubleBody: 'your app starts in "testing" mode, which means only emails you explicitly add as test users can sign in. this is a google requirement — you can\'t skip it.',
   },
   {
+    title: 'mobile install (optional)',
+    link: 'https://ngrok.com/download',
+    linkLabel: 'download ngrok →',
+    instructions: html`
+      <p><strong>skip this step if you only want BAREMAIL on your computer.</strong></p>
+      <p>to install BAREMAIL as a PWA on your phone, you need an HTTPS tunnel. <a href="https://ngrok.com" target="_blank" rel="noopener" style="color: var(--amber-dim);">ngrok</a> is free and takes ~1 minute:</p>
+      <ol class="wizard-instructions">
+        <li>install ngrok: <strong>brew install ngrok</strong> (mac) or download from the link below</li>
+        <li>create a free account at <a href="https://dashboard.ngrok.com/signup" target="_blank" rel="noopener" style="color: var(--amber-dim);">ngrok.com</a> and copy your auth token</li>
+        <li>run: <strong>ngrok config add-authtoken YOUR_TOKEN</strong></li>
+        <li>with BAREMAIL running (<strong>npm start</strong>), open a new terminal and run: <strong>ngrok http 3000</strong></li>
+        <li>copy the <strong>https://xxxx.ngrok-free.app</strong> URL — you'll add it in the next step</li>
+      </ol>
+    `,
+    troubleTitle: 'what is ngrok?',
+    troubleBody: 'ngrok creates a secure public URL that tunnels to your local server. this is needed because iPhones require HTTPS to install PWAs, and localhost doesn\'t work from other devices. the free tier is all you need.',
+  },
+  {
     title: 'create OAuth credentials',
     link: 'https://console.cloud.google.com/apis/credentials/oauthclient',
     linkLabel: 'open credentials page →',
@@ -88,10 +106,10 @@ const STEPS = [
         <li>name: <strong>BAREMAIL</strong> (or anything)</li>
         <li>authorized javascript origins: add <strong>http://localhost:3000</strong></li>
         <li>authorized redirect URIs: add <strong>http://localhost:3000</strong></li>
+        <li>if you set up ngrok in the previous step, also add your <strong>https://xxxx.ngrok-free.app</strong> URL to both fields above</li>
         <li>click <strong>create</strong></li>
         <li>you'll see a dialog with your <strong>client ID</strong> and <strong>client secret</strong> — keep this open for the next step</li>
       </ol>
-      <p style="margin-top: 12px; opacity: 0.8; font-size: 12px;">📱 <strong>setting up on mobile?</strong> also add your ngrok/tunnel URL to both authorized origins and redirect URIs.</p>
     `,
     troubleTitle: 'getting a "configure consent screen first" error?',
     troubleBody: 'go back to step 3 and make sure you completed the consent screen setup. you need to click through all the way to "back to dashboard" before creating credentials.',
@@ -102,7 +120,7 @@ const STEPS = [
     linkLabel: null,
     instructions: html`
       <p>paste the client ID and client secret from the dialog you just saw. BAREMAIL stores these locally in your browser — they never leave your machine.</p>
-      <p style="margin-top: 8px; opacity: 0.8; font-size: 12px;">📱 <strong>setting up on a new device?</strong> enter the same client ID and secret from your existing google cloud project.</p>
+      <p style="margin-top: 8px; opacity: 0.8; font-size: 12px;">📱 <strong>setting up on a new device?</strong> enter the same client ID and secret from your existing google cloud project — find them at <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" style="color: var(--amber-dim);">APIs & Services → Credentials</a>.</p>
     `,
     troubleTitle: 'where do i find these?',
     troubleBody: 'go to APIs & Services → Credentials in the cloud console. click on the OAuth client you just created to see the client ID and secret again.',
@@ -216,7 +234,7 @@ function SetupWizard({ onComplete }: { onComplete: () => void }) {
           : html`<div />`
         }
         <button class="btn btn-primary" onClick=${handleNext}>
-          ${isLastStep ? 'save and sign in →' : 'done, next step →'}
+          ${isLastStep ? 'save and sign in →' : step === 4 ? 'skip — desktop only →' : 'done, next step →'}
         </button>
       </div>
     </div>

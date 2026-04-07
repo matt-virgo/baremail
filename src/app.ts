@@ -203,6 +203,18 @@ function App() {
     setOutboxCount(count);
   }, [goToInbox]);
 
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshTrigger(n => n + 1);
+    setActiveLabel('inbox');
+    setApiSearchQuery('');
+    setLocalSearchQuery('');
+    setView('inbox');
+    setSelectedEmail(null);
+    setSelectedIndex(0);
+  }, []);
+
   const handleLogout = useCallback(async () => {
     await logout();
     setView('login');
@@ -365,6 +377,7 @@ function App() {
             onToggleTheme=${toggleTheme}
             userEmail=${getUserEmail()}
             onLogout=${handleLogout}
+            onRefresh=${handleRefresh}
           />
 
           <${Nav}
@@ -391,6 +404,7 @@ function App() {
             nextPageToken=${nextPageToken}
             needsFetch=${!currentData}
             loading=${loading}
+            refreshTrigger=${refreshTrigger}
             onEmailsLoaded=${handleEmailsLoaded}
             onOpenEmail=${openEmail}
             onSetLoading=${setLoading}
