@@ -513,6 +513,54 @@ a:hover { color: var(--amber-bright); }
   justify-content: center;
 }
 
+/* ── Gallery page ── */
+.gallery {
+  padding: 40px 0;
+}
+
+.gallery-intro {
+  color: var(--dim-text);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.gallery-item {
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  padding: 8px;
+  transition: border-color 0.2s, box-shadow 0.3s;
+}
+
+.gallery-item:hover {
+  border-color: var(--amber-dim);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--amber) 12%, transparent);
+}
+
+.gallery-item a {
+  display: block;
+  line-height: 0;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gallery-item figcaption {
+  color: var(--dim-text);
+  font-size: 11px;
+  padding: 10px 4px 4px;
+  letter-spacing: 0.5px;
+}
+
 /* ── Animations ── */
 @keyframes bearBounce {
   0%, 100% { transform: translateY(0); }

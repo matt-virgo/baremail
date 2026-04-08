@@ -8,6 +8,8 @@
   ── email's bare necessities ──
 ```
 
+![BAREMAIL](marketing/og-image.png)
+
 ## What is BAREMAIL?
 
 BAREMAIL is a Progressive Web App that talks directly to the Gmail API. The entire app shell is under 200KB gzipped, cached by a service worker, and then the only network traffic is Gmail API JSON — the UI itself costs zero bytes on repeat visits.

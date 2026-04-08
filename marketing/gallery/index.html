@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a1410">
+  <meta name="description" content="Screenshots of BAREMAIL — a minimalist Gmail client with an amber terminal aesthetic.">
+  <meta property="og:title" content="Gallery — BAREMAIL">
+  <meta property="og:description" content="Screenshots of BAREMAIL — a minimalist Gmail client with an amber terminal aesthetic.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://baremail.app/gallery">
+  <meta property="og:image" content="https://baremail.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="BAREMAIL">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gallery — BAREMAIL">
+  <meta name="twitter:description" content="Screenshots of BAREMAIL — a minimalist Gmail client with an amber terminal aesthetic.">
+  <meta name="twitter:image" content="https://baremail.app/og-image.png">
+  <link rel="canonical" href="https://baremail.app/gallery">
+  <title>Gallery — BAREMAIL ʕ·ᴥ·ʔ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐻</text></svg>">
+</head>
+<body>
+  <div class="crt-scanlines"></div>
+  <div class="crt-vignette"></div>
+
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-bear">ʕ·ᴥ·ʔ</div>
+      <div class="header-wordmark">BAREMAIL</div>
+      <div class="header-tagline">── email's bare necessities ──</div>
+    </header>
+
+    <!-- Nav -->
+    <nav class="topnav">
+      <a href="/">home</a>
+      <a href="/gallery" class="active">gallery</a>
+      <a href="/about">about</a>
+      <div class="topnav-spacer"></div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">◐ theme</button>
+    </nav>
+
+    <!-- Gallery -->
+    <section class="gallery fade-in fade-in-1">
+      <div class="section-label">── screenshots ──</div>
+      <p class="gallery-intro">The amber terminal aesthetic — in dark and light modes.</p>
+
+      <div class="gallery-grid">
+        <figure class="gallery-item">
+          <a href="../images/baremail5.png" target="_blank">
+            <img src="../images/baremail5.png" alt="Inbox view in dark mode showing email list with sender names, subjects, and timestamps" loading="lazy">
+          </a>
+          <figcaption>Inbox — dark mode</figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <a href="../images/baremail6.png" target="_blank">
+            <img src="../images/baremail6.png" alt="Inbox view in light mode showing email list with warm sepia tones" loading="lazy">
+          </a>
+          <figcaption>Inbox — light mode</figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <a href="../images/baremail1.png" target="_blank">
+            <img src="../images/baremail1.png" alt="Compose view with to, subject, and body fields plus file attachment option" loading="lazy">
+          </a>
+          <figcaption>Compose</figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <a href="../images/baremail2.png" target="_blank">
+            <img src="../images/baremail2.png" alt="Empty drafts folder with ASCII bear holding a honey pot and inbox zero message" loading="lazy">
+          </a>
+          <figcaption>Inbox zero — honey bear</figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <a href="../images/baremail3.png" target="_blank">
+            <img src="../images/baremail3.png" alt="Empty inbox with ASCII bear fishing and inbox clear message" loading="lazy">
+          </a>
+          <figcaption>Inbox zero — fishing bear</figcaption>
+        </figure>
+
+        <figure class="gallery-item">
+          <a href="../images/baremail4.png" target="_blank">
+            <img src="../images/baremail4.png" alt="Honey catcher mini-game with falling honey pots and a score counter" loading="lazy">
+          </a>
+          <figcaption>Honey catcher mini-game</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/">home</a>
+        <a href="/gallery">gallery</a>
+        <a href="/about">about</a>
+        <a href="https://github.com/matt-virgo/baremail">github</a>
+        <a href="https://www.buymeacoffee.com/mzschwartz88">support</a>
+      </div>
+      <div class="footer-copy">MIT © 2026 BAREMAIL ʕ·ᴥ·ʔ</div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var stored = localStorage.getItem('baremail-theme');
+      if (stored) {
+        document.documentElement.setAttribute('data-theme', stored);
+      } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('baremail-theme', next);
+    }
+  </script>
+</body>
+</html>
