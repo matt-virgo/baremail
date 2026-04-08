@@ -159,12 +159,17 @@ function App() {
   const handleEmailsLoaded = useCallback((key: string, newEmails: GmailMessage[], token: string | null, append = false) => {
     setLabelCache(prev => {
       const existing = prev[key];
+      let emails: GmailMessage[];
+      if (append) {
+        const existingIds = new Set((existing?.emails || []).map(e => e.id));
+        const deduped = newEmails.filter(e => !existingIds.has(e.id));
+        emails = [...(existing?.emails || []), ...deduped];
+      } else {
+        emails = newEmails;
+      }
       return {
         ...prev,
-        [key]: {
-          emails: append ? [...(existing?.emails || []), ...newEmails] : newEmails,
-          nextPageToken: token,
-        },
+        [key]: { emails, nextPageToken: token },
       };
     });
   }, []);

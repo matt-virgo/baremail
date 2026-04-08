@@ -383,6 +383,14 @@ button:focus-visible { outline: 1px solid var(--amber); outline-offset: 2px; }
   border-top: 1px solid color-mix(in srgb, var(--border) 25%, transparent);
 }
 
+.inbox-end {
+  text-align: center;
+  padding: 12px 0;
+  color: var(--dim-text);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
 /* ── Reader ── */
 .reader-toolbar {
   display: flex;

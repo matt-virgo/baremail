@@ -124,14 +124,18 @@ export function InboxView({
       onEmailsLoaded(key, metadata, result.nextPageToken, isLoadMore);
     } catch (err) {
       console.error('Failed to fetch inbox:', err);
-      setError(String(err));
-      try {
-        const cached = await getAllCachedMessages();
-        if (cached.length > 0) {
-          onEmailsLoaded(key, cached, null);
+      if (pageToken) {
+        setError('Failed to load more — tap to retry');
+      } else {
+        setError(String(err));
+        try {
+          const cached = await getAllCachedMessages();
+          if (cached.length > 0) {
+            onEmailsLoaded(key, cached, null);
+          }
+        } catch {
+          // No cached data either
         }
-      } catch {
-        // No cached data either
       }
     } finally {
       onSetLoading(false);
@@ -316,16 +320,20 @@ export function InboxView({
         </div>
       `)}
 
-      ${!isLocalSearch && !isApiSearch && (nextPageToken || loading) && html`
+      ${!isLocalSearch && !isApiSearch && (nextPageToken || loading || error) && html`
         <div class="inbox-load-more">
           <button
             class="btn btn-secondary"
-            onClick=${handleLoadMore}
+            onClick=${() => { setError(null); handleLoadMore(); }}
             disabled=${loading}
           >
-            ${loading ? 'loading...' : 'load more ↓ (~4KB)'}
+            ${loading ? 'loading...' : error ? 'retry ↻' : 'load more ↓ (~4KB)'}
           </button>
         </div>
+      `}
+
+      ${!isLocalSearch && !isApiSearch && !nextPageToken && !loading && !error && emails.length > 0 && html`
+        <div class="inbox-end fade-in">── end ──</div>
       `}
 
       ${isLocalSearch && html`

@@ -21,6 +21,7 @@ BAREMAIL is a Progressive Web App that talks directly to the Gmail API. The enti
 ## Features
 
 - Inbox with unread indicators, starring, and archive
+- Mobile compatible progressive web app
 - Plain text message reader with typewriter effect
 - Compose, reply, and forward (plain text)
 - Search via Gmail's query syntax
@@ -68,7 +69,7 @@ Open [http://localhost:3000](http://localhost:3000) and the built-in setup wizar
 
 The wizard has 7 steps (one optional) — each one opens the exact Google Cloud page you need, tells you what to click, and lets you paste your credentials directly into the app. No config files to edit.
 
-**Video walkthrough:** [Watch the setup wizard in action](https://youtu.be/dmzs4mWzizU)
+**Video walkthrough:** [Watch the setup wizard in action](https://youtu.be/I9Jfs52-nf0)
 
 > On first sign-in, you'll see a warning: "Google hasn't verified this app." This is normal for development. Click **Advanced** → **Go to BAREMAIL (unsafe)** to continue. Your data still goes directly to Google's API, never through a third party.
 
