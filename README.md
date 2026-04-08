@@ -266,6 +266,37 @@ Double-check that you copied the full Client ID (it ends with `.apps.googleuserc
 **"Google hasn't verified this app"**
 This is expected. Click **Advanced** → **Go to BAREMAIL (unsafe)**. This warning appears because your app is in testing mode. Your data still goes directly to Google's API.
 
+## FAQ
+
+**Why not just use Thunderbird / mutt / Apple Mail over IMAP?**
+
+A few reasons:
+
+1. **IMAP is chatty.** It requires many round trips to synchronize mailbox state, and re-establishing that state after a dropped connection is painful. On flaky airplane wifi, that matters — a lot. BAREMAIL talks to Gmail's REST API, which is single request/response per action with no persistent connection to maintain.
+2. **Gmail is phasing out IMAP-friendly auth.** Gmail requires you to either enable "less secure app" access (being deprecated) or deal with proprietary OAuth flows that most desktop clients handle poorly. BAREMAIL uses the same OAuth + PKCE flow that Google's own apps use.
+3. **Zero install, works anywhere.** BAREMAIL runs in any browser and installs as a PWA. No desktop app to configure, no IMAP settings to get right, nothing to sync across devices. Open it, sign in, done.
+4. **It's a different use case.** If you already have a desktop mail client synced and ready to go, great — use it! BAREMAIL is for when you're on a plane, open your laptop, and Gmail won't load. No pre-synced mailbox needed; just a browser and a trickle of bandwidth.
+
+**Why not just use regular Gmail? It works okay on bad connections.**
+
+Gmail's web client is surprisingly well-optimized *if* you already have it cached. The problem is cold starts — if you haven't loaded Gmail recently (or at all on that device), you're downloading megabytes of JavaScript before you can read a single email. BAREMAIL's entire app shell is ~60KB gzipped and cached by a service worker after the first visit. After that, the only network traffic is the raw API data for your messages.
+
+**Why not switch to Fastmail / Hey / ProtonMail / etc.?**
+
+BAREMAIL isn't a mail service — it's a client. You keep your existing Gmail account, contacts, history, everything. It's free, open source, has no backend, and runs entirely in your browser. If you're happy with Gmail but want a lighter interface, that's what this is for.
+
+**Why do I need to create a Google Cloud project? That sounds complicated.**
+
+Google doesn't offer a simple "connect your app to Gmail" button — any third-party client needs OAuth credentials from a GCP project. There's no way around this without running a backend server (which would defeat the purpose of BAREMAIL). The built-in setup wizard walks you through each step, opens the exact GCP pages you need, and takes about 3 minutes.
+
+**Is it safe to have the OAuth client secret in browser code?**
+
+Yes. Google's OAuth documentation explicitly covers this case for browser-based ("single-page") apps. The client secret alone can't access anyone's data — it requires user consent via the OAuth flow, and BAREMAIL uses PKCE to protect against authorization code interception. This is the same model that any client-side Gmail integration uses.
+
+**Can I use this with non-Gmail accounts?**
+
+Not currently. BAREMAIL is built specifically for the Gmail REST API. Supporting generic IMAP would add significant complexity and reintroduce the round-trip problems that BAREMAIL is designed to avoid.
+
 ## Contributing
 
 - Every PR must not increase the app shell beyond 200KB gzipped
