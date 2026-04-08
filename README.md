@@ -324,3 +324,5 @@ If BAREMAIL saved you from staring at a loading spinner on airplane wifi, consid
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=matt-virgo/baremail&type=Date)](https://star-history.com/#matt-virgo/baremail&Date)
+
+## Thanks!
